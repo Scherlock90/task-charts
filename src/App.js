@@ -50,11 +50,11 @@ export default class App extends React.Component {
 
 function DataThumb(props) {
   return (
-    <LineChart width={730} height={250} data={props.data}
-      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+    <LineChart width={900} height={250} data={props.data}
+      margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="Year" />
-      <YAxis  />
+      <XAxis label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} dataKey="Year" />
+      <YAxis label={{ value: 'Population', angle: -90, position: 'insideLeft', offset: -20 }} />
       <Tooltip />
       <Legend />
       <Line type="monotone" dataKey="Value" stroke="#8884d8" />
