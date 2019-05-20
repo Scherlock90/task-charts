@@ -3,21 +3,22 @@ import axios from 'axios';
 import { BarChart, LineChart, Line, CartesianGrid, Tooltip, Legend, XAxis, YAxis, Bar } from 'recharts';
 import './Styles/main.css'
 
-let tableCash = "CLDR display name";
+let displayName = "CLDR display name";
 let conutrCode = "Country Code";
 let countryName = "Country Name";
 let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
 let year = "Year";
 
-let count = function (ary, classifier) {
-  classifier = classifier || String;
-  return ary.reduce(function (counter, item) {
-      var p = classifier(item);
-      counter[p] = counter.hasOwnProperty(p) ? counter[p] + 1 : 1;
-      return counter;
-  }, {})
-};
+// let count = function (ary, classifier) {
+//   classifier = classifier || String;
+//   return minor.reduce(function (counter, item) {
+//       var p = classifier(item);
+//       counter[p] = counter.hasOwnProperty(p) ? counter[p] + 1 : 1;
+//       return counter;
+//   }, {})
+// };
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -25,11 +26,15 @@ export default class App extends React.Component {
     this.state = {      
       population: [],
       minor: [],
-      counts: []   ,
-      selectedAlbum: null,   
-    }
-  }
+      filterMinor: 'Euro',
+      counts: [],
 
+      selectedAlbum: null, 
+    }
+    this.compareBy.bind(this);
+    this.sortBy.bind(this);
+  }
+    
   componentDidMount() {
     axios.get('https://pkgstore.datahub.io/core/population/population_json/data/43d34c2353cbd16a0aa8cadfb193af05/population_json.json')
       .then(res => {
@@ -44,14 +49,30 @@ export default class App extends React.Component {
         // console.log(res.data.filter(eee => eee[currencyMinor]));
         this.setState({
           minor: res.data,
-        })
+        });
+        // this.determineFeature();
+        // console.log(this.determineFeature());
       })
+      
+    }
+    compareBy(key) {
+      return function (a, b) {
+        if (a[key] < b[key]) return -1;
+        if (a[key] > b[key]) return 1;
+        return 0;
+      };
+    }
+   
+    sortBy(key) {
+      let arrayCopy = [...this.state.minor];
+      arrayCopy.sort(this.compareBy(key));
+      this.setState({minor: arrayCopy});
     }
 
-    counter = (e) => {
-      var  count = {};
-      this.state.minor.forEach(function(i) { count[i] = (count[i]||0) + 1;});
-      console.log(count);
+    sumEuro = () => {
+      let arrayCopy = [...this.state.minor];
+      this.setState({minor: arrayCopy});
+      console.log('sum euro');
     }
   render() {
     const { population, minor, counts } = this.state;  
@@ -67,23 +88,25 @@ export default class App extends React.Component {
     ) : (
         <div className="center">No data yet! </div>
     )
-    const dataList2 = minor.length ? (minor.filter((album, i) => {
+    const dataList2 = minor.filter((album, i) => {
       return (
         <ul key={i}>
-          {album.currencyMinor}
-          {album.currencyName}
+          {album[currencyMinor]}
+          {album[currencyName]}
         </ul>
       );
-    }).map(ee => ee)
-    ) : (
-        <div className="center">No data yet! </div>
-    )
+    }).map(ee => ee).filter(function(hero) {
+      return hero[currencyName] === "Euro";
+    });
+    console.log(dataList2);
     return (
       <div className="containerLoader" style={containerLoader}>
         <div className="card z-depth-0 project-summary thumb">
           <div className="card-content grey-text text-darken-3 containerPost">
             <LineCharts data={dataList} />
             <BarCharts  data={dataList2} />
+            <div onClick={() => this.sortBy(currencyMinor)}>Sort</div>
+            <button onClick={this.sumEuro}> Sum Euro</button>
           </div>          
         </div>
       </div>
@@ -98,7 +121,7 @@ function LineCharts(props) {
     <LineChart width={900} height={250} data={props.data}
       margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis tick={<CustomizedAxisTick/>}   type="category"  interval="preserveStartEnd"   label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} dataKey="Year" />
+      <XAxis tick={<CustomizedAxisTick/>}   type="category" interval="preserveStartEnd"   label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} dataKey="Year" />
       <YAxis interval="preserveStartEnd" type="number"  domain={['auto', 'auto']}  label={{ value: 'Population', angle: -90, position: 'insideLeft', offset: -20 }}  />
       <Tooltip />
       <Legend />
