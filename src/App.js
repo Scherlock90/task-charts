@@ -8,6 +8,7 @@ let conutrCode = "Country Code";
 let countryName = "Country Name";
 let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
+let continent = "Continent";
 let year = "Year";
 
 Array.prototype.sum = function (prop) {
@@ -34,6 +35,8 @@ export default class App extends React.Component {
       minor: [],
       filterMinor: 'Euro',
       counts: [],
+      countryInWorld: 0,
+      countryWithEuro: 0,
       selectedAlbum: null, 
     }
     this.compareBy.bind(this);
@@ -70,7 +73,7 @@ export default class App extends React.Component {
     }
 
   render() {
-    const { population, minor, counts } = this.state;  
+    const { population, minor, counts, countryWithEuro, countryInWorld } = this.state;  
     const { selectedAlbum } = this.state;  
     const dataList = population.length ? (population.slice(11449, 11506).filter((populationData, i) => {
       return (
@@ -83,26 +86,49 @@ export default class App extends React.Component {
     ) : (
         <div className="center">No data yet! </div>
     )
-    const dataList2 = minor.filter((album, i) => {
-      return (
-        <ul key={i}>
-          {album[currencyMinor]}
-          {album[currencyName]}
-        </ul>
-      );
-    }).map(ee => ee).filter(function(hero) {
-      return hero[currencyName] === "Euro";
+    const dataList2 = minor
+      .filter((album, i) => {
+        return (
+          <ul key={album.id}>
+            {album[currencyMinor]}
+            {album[currencyName]}
+            {album[continent]}
+          </ul>
+        );
+      })
+      .map(ee => ee)
+      .filter(function(hero) {
+        if(hero[currencyName] === "Euro"){
+          return hero[currencyName]
+        } else if (hero[continent] === "Eu") {
+          return hero[continent]
+        } 
+      });
+
+    const dataList3 = minor
+    .map(ee => ee)
+    .filter(function(sumCountry) {           
+      if (sumCountry === "Eu") {
+        return sumCountry
+      } 
     });
-    console.log(dataList2);
-    console.log(dataList2.sum(currencyMinor));
+    
     let totalAmount = ( sumProperty(dataList2, currencyMinor) ); 
-console.log(  totalAmount  );
+    let totalCountry = (sumProperty(dataList2, continent ))
+    let totEuro = dataList2.sum(continent);
+    console.log(minor.length);
+    console.log(totEuro.length);
+    console.log("Value euro coin: " + totalAmount );
+    console.log("Total number of country in the world: " + totalCountry);
     return (
       <div className="containerLoader" style={containerLoader}>
         <div className="card z-depth-0 project-summary thumb">
           <div className="card-content grey-text text-darken-3 containerPost">
             <LineCharts data={dataList} />
             <BarCharts  data={dataList2} />
+            <div>Countries with the euro currency: {countryWithEuro} </div>
+            <div>The number of countries in the world: {countryInWorld} </div>
+            {}
             <div onClick={() => this.sortBy(currencyMinor)}>Sort</div>
             {/* <button onClick={e => this.sumEuro(e)}> Sum Euro</button> */}
           </div>          
@@ -113,8 +139,6 @@ console.log(  totalAmount  );
 }
 
 function LineCharts(props) {
-  let min = [parseInt(1958)];
-  let max = [parseInt(2018)];
   return (
     <LineChart width={900} height={250} data={props.data}
       margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
