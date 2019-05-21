@@ -115,11 +115,13 @@ export default class App extends React.Component {
     
     let totalAmount = ( sumProperty(dataList2, currencyMinor) ); 
     let totalCountry = (sumProperty(dataList2, continent ))
-    let totEuro = dataList2.sum(continent);
-    console.log(minor.length);
-    console.log(totEuro.length);
+    let totEuro = dataList2.sum(currencyName);
+    console.log(minor);
+    // console.log(minor.length);
+    // console.log(totEuro.length);
     console.log("Value euro coin: " + totalAmount );
-    console.log("Total number of country in the world: " + totalCountry);
+    console.log("Country with euro: " + totEuro.length);
+    console.log("Total number of country in the world: " + minor.length);
     return (
       <div className="containerLoader" style={containerLoader}>
         <div className="card z-depth-0 project-summary thumb">
