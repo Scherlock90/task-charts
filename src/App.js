@@ -10,6 +10,22 @@ let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
 let year = "Year";
 
+Array.prototype.sum = function (prop) {
+  var total = 0
+  for ( var i = 0, _len = this.length; i < _len; i++ ) {
+      total += this[i][prop]
+  }
+  return total
+}
+
+function sumProperty(arr, type) {
+  return arr.reduce((total, obj) => {
+    if (typeof obj[type] === 'string') {
+      return total + Number(obj[type]);
+    }
+    return total + obj[type];
+  }, 0);
+}
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -18,7 +34,6 @@ export default class App extends React.Component {
       minor: [],
       filterMinor: 'Euro',
       counts: [],
-
       selectedAlbum: null, 
     }
     this.compareBy.bind(this);
@@ -54,18 +69,6 @@ export default class App extends React.Component {
       this.setState({minor: arrayCopy});
     }
 
-    sumEuro = (e) => {
-      e.preventDefault();
-      let c = [...this.state.minor];
-      let num = 0;
-      if(c === "Euro"){
-        num += 2
-      }
-      this.setState({
-        counts: num
-      })
-      console.log('sum euro ' + num);
-    }
   render() {
     const { population, minor, counts } = this.state;  
     const { selectedAlbum } = this.state;  
@@ -91,6 +94,9 @@ export default class App extends React.Component {
       return hero[currencyName] === "Euro";
     });
     console.log(dataList2);
+    console.log(dataList2.sum(currencyMinor));
+    let totalAmount = ( sumProperty(dataList2, currencyMinor) ); 
+console.log(  totalAmount  );
     return (
       <div className="containerLoader" style={containerLoader}>
         <div className="card z-depth-0 project-summary thumb">
@@ -98,7 +104,7 @@ export default class App extends React.Component {
             <LineCharts data={dataList} />
             <BarCharts  data={dataList2} />
             <div onClick={() => this.sortBy(currencyMinor)}>Sort</div>
-            <button onClick={e => this.sumEuro(e)}> Sum Euro</button>
+            {/* <button onClick={e => this.sumEuro(e)}> Sum Euro</button> */}
           </div>          
         </div>
       </div>
