@@ -10,16 +10,6 @@ let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
 let year = "Year";
 
-// let count = function (ary, classifier) {
-//   classifier = classifier || String;
-//   return minor.reduce(function (counter, item) {
-//       var p = classifier(item);
-//       counter[p] = counter.hasOwnProperty(p) ? counter[p] + 1 : 1;
-//       return counter;
-//   }, {})
-// };
-
-
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -38,20 +28,15 @@ export default class App extends React.Component {
   componentDidMount() {
     axios.get('https://pkgstore.datahub.io/core/population/population_json/data/43d34c2353cbd16a0aa8cadfb193af05/population_json.json')
       .then(res => {
-        // console.log(res.data.slice(11449, 11506));
         this.setState({
           population: res.data,
         })
       })
       axios.get('https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/471a2e653140ecdd7243cdcacfd66608/country-codes_json.json')
       .then(res => {
-        // console.log(res.data.map(eee => eee.Capital));
-        // console.log(res.data.filter(eee => eee[currencyMinor]));
         this.setState({
           minor: res.data,
         });
-        // this.determineFeature();
-        // console.log(this.determineFeature());
       })
       
     }
@@ -69,10 +54,17 @@ export default class App extends React.Component {
       this.setState({minor: arrayCopy});
     }
 
-    sumEuro = () => {
-      let arrayCopy = [...this.state.minor];
-      this.setState({minor: arrayCopy});
-      console.log('sum euro');
+    sumEuro = (e) => {
+      e.preventDefault();
+      let c = [...this.state.minor];
+      let num = 0;
+      if(c === "Euro"){
+        num += 2
+      }
+      this.setState({
+        counts: num
+      })
+      console.log('sum euro ' + num);
     }
   render() {
     const { population, minor, counts } = this.state;  
@@ -106,7 +98,7 @@ export default class App extends React.Component {
             <LineCharts data={dataList} />
             <BarCharts  data={dataList2} />
             <div onClick={() => this.sortBy(currencyMinor)}>Sort</div>
-            <button onClick={this.sumEuro}> Sum Euro</button>
+            <button onClick={e => this.sumEuro(e)}> Sum Euro</button>
           </div>          
         </div>
       </div>
