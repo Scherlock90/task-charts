@@ -27,6 +27,10 @@
   display: grid;
 }
 
+.containerLoader .thumb .containerPost .chartsContainer {
+  margin: 1em;
+}
+
 .backgroundCard {
   background-color: #fff3e0 !important;
   max-width: 1200px;
