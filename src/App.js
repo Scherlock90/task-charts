@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { BarChart, LineChart, Line, CartesianGrid, Tooltip, Legend, XAxis, YAxis, Bar } from 'recharts';
+import { BarChart, LineChart, Line, countrytesianGrid, Tooltip, Legend, XAxis, YAxis, Bar } from 'recharts';
 import './Styles/main.css'
 
 let displayName = "CLDR display name";
@@ -64,8 +64,8 @@ export default class App extends React.Component {
       })
     axios.get('https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/471a2e653140ecdd7243cdcacfd66608/country-codes_json.json')
       .then(res => {
-        let countryWithEuro = res.data.map(function (car) {
-          return car[currencyName] === "Euro"
+        let countryWithEuro = res.data.map(function (country) {
+          return country[currencyName] === "Euro"
         }).reduce(function (previousValue, currentValue) {
           return previousValue + currentValue
         });
@@ -122,11 +122,11 @@ export default class App extends React.Component {
         );
       })
       .map(ee => ee)
-      .filter(function (hero) {
-        if (hero[currencyName] === "Euro") {
-          return hero[currencyName]
-        }
-      });
+      // .filter(function (hero) {
+      //   if (hero[currencyName] === hero[currencyName]) {
+      //     return hero[currencyName]
+      //   }
+      // });
 
     // const dataList3 = minor
     // .filter(function(hero) {
@@ -140,6 +140,23 @@ export default class App extends React.Component {
     //     return hero[continent]
     //   }
     // });
+    var result = [];
+    minor.reduce(function (res, value) {
+      if (!res[value[currencyName]]) {
+        res[value[currencyName]] = { [currencyName]: value[currencyName], [currencyMinor]: 0 };
+        result.push(res[value[currencyName]])
+      }
+      res[value[currencyName]][currencyMinor] += value[currencyMinor];
+      return res;
+    }, {});
+    console.log(result);
+
+    // let sumThisSameCurrency = minor.map(function (country) {
+    //   return country[currencyName] === "Euro"
+    // }).reduce(function (previousValue, currentValue) {
+    //   return previousValue + currentValue
+    // }, 0);
+    // console.log(sumThisSameCurrency);
 
     // const grouped = groupBy(dataList4, pet => pet[currencyName]);
     // const grouped2 = groupBy(dataList4, pet => pet[continent]);
@@ -158,8 +175,8 @@ export default class App extends React.Component {
     // console.log(grouped2.get("EU"));
     return (
       <div className="containerLoader" style={containerLoader}>
-        <div className="card z-depth-0 project-summary thumb">
-          <div className="card-content grey-text text-darken-3 containerPost">
+        <div className="countryd z-depth-0 project-summary thumb">
+          <div className="countryd-content grey-text text-darken-3 containerPost">
             <div className="chartsContainer">
               <LineCharts data={dataList} />
             </div>
@@ -179,7 +196,7 @@ function LineCharts(props) {
   return (
     <LineChart width={900} height={250} data={props.data}
       margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
-      <CartesianGrid strokeDasharray="3 3" />
+      <countrytesianGrid strokeDasharray="3 3" />
       <XAxis tick={<CustomizedAxisTick />} type="category" interval="preserveStartEnd" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} dataKey="Year" />
       <YAxis interval="preserveStartEnd" type="number" domain={['auto', 'auto']} label={{ value: 'Population', angle: -90, position: 'insideLeft', offset: -20 }} />
       <Tooltip />
@@ -192,7 +209,7 @@ function LineCharts(props) {
 function BarCharts(props) {
   return (
     <BarChart width={900} height={250} data={props.data}>
-      <CartesianGrid strokeDasharray="3 3" />
+      <countrytesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="ISO4217-currency_name" />
       <YAxis />
       <Tooltip />
