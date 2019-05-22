@@ -40,6 +40,7 @@ function sumProperty(arr, type) {
     return total + obj[type];
   }, 0);
 }
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -63,29 +64,23 @@ export default class App extends React.Component {
       })
       axios.get('https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/471a2e653140ecdd7243cdcacfd66608/country-codes_json.json')
       .then(res => {
-        let reduceCarPrice = res.data.map(function(car) {
+        let countryWithEuro = res.data.map(function(car) {
           return car[currencyName] === "Euro"
         }).reduce(function(previousValue, currentValue) {
           return previousValue + currentValue
-        });         
+        });     
+        let countryInTheWorld = res.data;
         this.setState({
           minor: res.data,
-          countryWithEuro: reduceCarPrice
+          countryWithEuro: countryWithEuro,
+          countryInWorld: countryInTheWorld.length,
         });
         this.sortBy(currencyName);
-        console.log(reduceCarPrice);
+        console.log(countryWithEuro);
+        console.log(countryInTheWorld);
       })
-      
     }
 
-    // sorterEuro = (e) => {
-    //   let arrayCoppy = [...this.state.minor];
-    //   const grouped = groupBy(arrayCoppy, euro => euro[currencyName]);
-    //   let gruped = grouped.get("Euro");
-    //   this.setState({
-    //     countryWithEuro: gruped
-    //   })
-    // } 
     compareBy(key) {
       return function (a, b) {
         if (a[key] < b[key]) return -1;
@@ -153,12 +148,12 @@ export default class App extends React.Component {
     // console.log(minor);
     // console.log(minor.length);
     // console.log(totEuro.length);
-    console.log("Value euro coin: " + totalAmount );
-    console.log("Country with euro: " + totEuro);
-    console.log("Total number of country in the world: " + minor.length);
+    // console.log("Value euro coin: " + totalAmount );
+    // console.log("Country with euro: " + totEuro);
+    // console.log("Total number of country in the world: " + minor.length);
     // console.log('Grouped by? ' +group);
-    console.log(grouped.get("Euro"));
-    console.log(grouped2.get("EU"));
+    // console.log(grouped.get("Euro"));
+    // console.log(grouped2.get("EU"));
     return (
       <div className="containerLoader" style={containerLoader}>
         <div className="card z-depth-0 project-summary thumb">
