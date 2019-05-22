@@ -32,14 +32,23 @@ Array.prototype.sum = function (prop) {
 //   return map;
 // }
 
-// function sumProperty(arr, type) {
-//   return arr.reduce((total, obj) => {
-//     if (typeof obj[type] === 'string') {
-//       return total + Number(obj[type]);
-//     }
-//     return total + obj[type];
-//   }, 0);
-// }
+function sumProperty(arr, type) {
+  return arr.reduce((total, obj) => {
+    if (typeof obj[type] === 'string') {
+      return total + Number(obj[type]);
+    }
+    return total + obj[type];
+  }, 0);
+}
+const count = function (ary, classifier) {
+  classifier = classifier || String;
+  return ary.reduce(function (counter, item) {
+      var p = classifier(item);
+      counter[p] = counter.hasOwnProperty(p) ? counter[p] + 1 : 1;
+      return counter;
+  }, {})
+};
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -94,7 +103,7 @@ export default class App extends React.Component {
     arrayCopy.sort(this.compareBy(key));
     this.setState({ minor: arrayCopy });
   }
-
+  
   render() {
     const { population, minor, counts, countryWithEuro, countryInWorld } = this.state;
 
@@ -111,17 +120,17 @@ export default class App extends React.Component {
     ) : (
         <div className="center">No data yet! </div>
       )
-    const dataList2 = minor
-      .filter((album, i) => {
-        return (
-          <ul key={album.id}>
-            {album[currencyMinor]}
-            {album[currencyName]}
-            {album[continent]}
-          </ul>
-        );
-      })
-      .map(ee => ee)
+    // const dataList2 = minor
+    //   .filter((album, i) => {
+    //     return (
+    //       <ul key={album.id}>
+    //         {album[currencyMinor]}
+    //         {album[currencyName]}
+    //         {album[continent]}
+    //       </ul>
+    //     );
+    //   })
+    //   .map(ee => ee)
       // .filter(function (hero) {
       //   if (hero[currencyName] === hero[currencyName]) {
       //     return hero[currencyName]
@@ -140,17 +149,20 @@ export default class App extends React.Component {
     //     return hero[continent]
     //   }
     // });
-    var result = [];
+    let result = [];
     minor.reduce(function (res, value) {
       if (!res[value[currencyName]]) {
-        res[value[currencyName]] = { [currencyName]: value[currencyName], [currencyMinor]: 0 };
+        res[value[currencyName]] = { [currencyName]: value[currencyName], [currencyMinor]: value[currencyMinor] };
         result.push(res[value[currencyName]])
       }
       res[value[currencyName]][currencyMinor] += value[currencyMinor];
       return res;
     }, {});
     console.log(result);
-
+   const countUnitsNameOfCountry = count(minor, function (item) {
+      return item[currencyName]
+  });
+  console.log(countUnitsNameOfCountry);
     // let sumThisSameCurrency = minor.map(function (country) {
     //   return country[currencyName] === "Euro"
     // }).reduce(function (previousValue, currentValue) {
@@ -181,7 +193,7 @@ export default class App extends React.Component {
               <LineCharts data={dataList} />
             </div>
             <div className="chartsContainer">
-              <BarCharts data={dataList2} />
+              <BarCharts data={result} />
             </div>
             <div>Countries with the euro currency: {countryWithEuro} </div>
             <div>The number of countries in the world: {countryInWorld} </div>
