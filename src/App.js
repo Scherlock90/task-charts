@@ -9,7 +9,6 @@ let countryName = "Country Name";
 let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
 let continent = "Continent";
-let year = "Year";
 
 Array.prototype.sum = function (prop) {
   var total = 0
@@ -17,6 +16,20 @@ Array.prototype.sum = function (prop) {
       total += this[i][prop]
   }
   return total
+}
+
+function groupBy(list, keyGetter) {
+  const map = new Map();
+  list.forEach((item) => {
+       const key = keyGetter(item);
+       const collection = map.get(key);
+       if (!collection) {
+           map.set(key, [item]);
+       } else {
+           collection.push(item);
+       }
+  });
+  return map;
 }
 
 function sumProperty(arr, type) {
@@ -33,11 +46,9 @@ export default class App extends React.Component {
     this.state = {      
       population: [],
       minor: [],
-      filterMinor: 'Euro',
       counts: [],
       countryInWorld: 0,
       countryWithEuro: 0,
-      selectedAlbum: null, 
     }
     this.compareBy.bind(this);
     this.sortBy.bind(this);
@@ -52,12 +63,29 @@ export default class App extends React.Component {
       })
       axios.get('https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/471a2e653140ecdd7243cdcacfd66608/country-codes_json.json')
       .then(res => {
+        let reduceCarPrice = res.data.map(function(car) {
+          return car[currencyName] === "Euro"
+        }).reduce(function(previousValue, currentValue) {
+          return previousValue + currentValue
+        });         
         this.setState({
           minor: res.data,
+          countryWithEuro: reduceCarPrice
         });
+        this.sortBy(currencyName);
+        console.log(reduceCarPrice);
       })
       
     }
+
+    // sorterEuro = (e) => {
+    //   let arrayCoppy = [...this.state.minor];
+    //   const grouped = groupBy(arrayCoppy, euro => euro[currencyName]);
+    //   let gruped = grouped.get("Euro");
+    //   this.setState({
+    //     countryWithEuro: gruped
+    //   })
+    // } 
     compareBy(key) {
       return function (a, b) {
         if (a[key] < b[key]) return -1;
@@ -74,7 +102,7 @@ export default class App extends React.Component {
 
   render() {
     const { population, minor, counts, countryWithEuro, countryInWorld } = this.state;  
-    const { selectedAlbum } = this.state;  
+
     const dataList = population.length ? (population.slice(11449, 11506).filter((populationData, i) => {
       return (
         <ul key={i}>
@@ -87,41 +115,50 @@ export default class App extends React.Component {
         <div className="center">No data yet! </div>
     )
     const dataList2 = minor
-      .filter((album, i) => {
-        return (
-          <ul key={album.id}>
-            {album[currencyMinor]}
-            {album[currencyName]}
-            {album[continent]}
-          </ul>
-        );
-      })
+    .filter((album, i) => {
+      return (
+        <ul key={album.id}>
+          {album[currencyMinor]}
+          {album[currencyName]}
+          {album[continent]}
+        </ul>
+      );
+    })
       .map(ee => ee)
+      // .filter(function(hero) {
+      //   if(hero[currencyName] === "Euro"){
+      //     return hero[currencyName]
+      //   }
+      // });
+      
+      const dataList3 = minor
       .filter(function(hero) {
         if(hero[currencyName] === "Euro"){
           return hero[currencyName]
-        } else if (hero[continent] === "Eu") {
-          return hero[continent]
-        } 
+        }
       });
+      const dataList4 = minor
+    //   .filter(function(hero) {
+    //     if (hero[continent] === "EU"){
+    //     return hero[continent]
+    //   }
+    // });
 
-    const dataList3 = minor
-    .map(ee => ee)
-    .filter(function(sumCountry) {           
-      if (sumCountry === "Eu") {
-        return sumCountry
-      } 
-    });
-    
-    let totalAmount = ( sumProperty(dataList2, currencyMinor) ); 
-    let totalCountry = (sumProperty(dataList2, continent ))
-    let totEuro = dataList2.sum(currencyName);
-    console.log(minor);
+    const grouped = groupBy(dataList4, pet => pet[currencyName]);
+    const grouped2 = groupBy(dataList4, pet => pet[continent]);
+    let totalAmount = ( sumProperty(dataList3, currencyMinor) ); 
+    // let totalCountry = (sumProperty(dataList2, currencyName ))
+    let totEuro = dataList3.sum(currencyName).length;
+    // const group = dataList2.groupBy(currencyName);
+    // console.log(minor);
     // console.log(minor.length);
     // console.log(totEuro.length);
     console.log("Value euro coin: " + totalAmount );
-    console.log("Country with euro: " + totEuro.length);
+    console.log("Country with euro: " + totEuro);
     console.log("Total number of country in the world: " + minor.length);
+    // console.log('Grouped by? ' +group);
+    console.log(grouped.get("Euro"));
+    console.log(grouped2.get("EU"));
     return (
       <div className="containerLoader" style={containerLoader}>
         <div className="card z-depth-0 project-summary thumb">
@@ -131,7 +168,7 @@ export default class App extends React.Component {
             <div>Countries with the euro currency: {countryWithEuro} </div>
             <div>The number of countries in the world: {countryInWorld} </div>
             {}
-            <div onClick={() => this.sortBy(currencyMinor)}>Sort</div>
+            {/* <div onClick={() => this.sortBy(currencyName)}>Sort</div> */}
             {/* <button onClick={e => this.sumEuro(e)}> Sum Euro</button> */}
           </div>          
         </div>
