@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/task-charts/static/css/main.dafe8dfb.chunk.css",
-    "main.js": "/task-charts/static/js/main.82fe4436.chunk.js",
-    "main.js.map": "/task-charts/static/js/main.82fe4436.chunk.js.map",
+    "main.css": "/task-charts/static/css/main.6d3aedc1.chunk.css",
+    "main.js": "/task-charts/static/js/main.06eb609e.chunk.js",
+    "main.js.map": "/task-charts/static/js/main.06eb609e.chunk.js.map",
     "runtime~main.js": "/task-charts/static/js/runtime~main.fc413007.js",
     "runtime~main.js.map": "/task-charts/static/js/runtime~main.fc413007.js.map",
-    "static/js/2.cb547a4e.chunk.js": "/task-charts/static/js/2.cb547a4e.chunk.js",
-    "static/js/2.cb547a4e.chunk.js.map": "/task-charts/static/js/2.cb547a4e.chunk.js.map",
+    "static/js/2.4a13f122.chunk.js": "/task-charts/static/js/2.4a13f122.chunk.js",
+    "static/js/2.4a13f122.chunk.js.map": "/task-charts/static/js/2.4a13f122.chunk.js.map",
     "index.html": "/task-charts/index.html",
-    "precache-manifest.7260713be12edaa2370a44b1031d0e56.js": "/task-charts/precache-manifest.7260713be12edaa2370a44b1031d0e56.js",
+    "precache-manifest.baf9160f20019b15611ad3efd77e8f07.js": "/task-charts/precache-manifest.baf9160f20019b15611ad3efd77e8f07.js",
     "service-worker.js": "/task-charts/service-worker.js",
-    "static/css/main.dafe8dfb.chunk.css.map": "/task-charts/static/css/main.dafe8dfb.chunk.css.map"
+    "static/css/main.6d3aedc1.chunk.css.map": "/task-charts/static/css/main.6d3aedc1.chunk.css.map"
   }
 }
