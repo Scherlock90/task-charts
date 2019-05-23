@@ -24,6 +24,7 @@ export default class DataCharst extends React.Component {
     this.state = {
       population: [],
       minor: [],
+      cities: [],
       countryInWorld: 0,
       countryWithEuro: 0,
       textInfo: ''
@@ -38,6 +39,14 @@ export default class DataCharst extends React.Component {
         this.setState({
           population: res.data,
         })
+        console.log(res);
+      })
+      axios.get('https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json')
+      .then(res => {
+        this.setState({
+          cities: res.data,
+        })
+        console.log(res);
       })
     axios.get('https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/471a2e653140ecdd7243cdcacfd66608/country-codes_json.json')
       .then(res => {
@@ -77,7 +86,7 @@ export default class DataCharst extends React.Component {
   }
 
   render() {
-    const { population, minor, countryWithEuro, countryInWorld } = this.state;
+    const { population, minor, countryWithEuro, countryInWorld, cities } = this.state;
 
     const dataList = population.length ? (population.slice(11449, 11506)
       .filter((populationData, i) => {
@@ -107,6 +116,14 @@ export default class DataCharst extends React.Component {
       : (
         <div className="center">No data yet! </div>
       );
+
+let expenseMetrics2 = d3.nest()
+      .key(function (d) { return d.country; })
+      .rollup(function(v) { return {
+    count_cities: v.length,
+  }; })
+      .entries(cities);
+    console.log((expenseMetrics2));
 
     let expenseMetrics = d3.nest()
       .key(function (d) { return d[currencyName]; })
@@ -140,6 +157,9 @@ export default class DataCharst extends React.Component {
                 <Button variant="outline-primary" onClick={this.handleClickInfo}>Info</Button>
                 <div> {this.state.textInfo} </div>
               </div>
+            </div>
+            <div className="chartsContainer">
+              <BarCharts3 data={expenseMetrics2} />
             </div>
           </div>
         </div>
@@ -188,6 +208,7 @@ function LineCharts(props) {
       <Tooltip content={<CustomTooltip />} />
       <Legend verticalAlign="top" payload={[{ value: 'Population trend in Poland', type: 'line', color: 'rgb(136, 132, 216)' }]} />
       <Line type="monotone" dataKey="Value" stroke="#8884d8" />
+      <Line type="monotone" dataKey="Value" stroke="#82ca9d" />
     </LineChart>
   )
 }
@@ -225,6 +246,25 @@ function BarCharts2(props) {
       <Tooltip content={<CustomTooltip />} />
       <Legend verticalAlign="top" payload={[{ value: 'Number of countries using the currency', type: 'square', color: 'rgb(130, 202, 157)' }]} />
       <Bar dataKey="value.count" fill="#82ca9d" />
+    </BarChart>
+  )
+}
+function BarCharts3(props) {
+  const style={
+    padding: '0.2em'
+  }
+  return (
+    <BarChart width={900} height={400} data={props.data}>
+      <countrytesianGrid strokeDasharray="3 3" />
+      <XAxis tick={<CustomizedAxisTick />} dataKey="key" >
+        <Label value="Countries" offset={-5} position="insideBottomRight" />
+      </XAxis>
+      <YAxis>
+          <Label value="Number of cities" offset={0} angle={-90} position="insideLeft" />     
+      </YAxis>
+      <Tooltip content={<CustomTooltip />} />
+      <Legend verticalAlign="top" payload={[{ value: 'Number of cities in Countries', type: 'square', color: 'rgb(130, 202, 157)' }]} />
+      <Bar dataKey="value.count_cities" fill="#82ca9d" />
     </BarChart>
   )
 }
