@@ -8,7 +8,7 @@ import * as d3 from "d3";
 let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
 let continent = "Continent";
-let textInfo = 'Ponieważ nie do końca było sprecyzowane czego dane mają dotyczyć "rozkład ilościowy walut używanych na świecie" czy ma to być ilość krajów posługujących się walutą czy waluta pomnożona przez jej wartość -> ISO4217-currency_minor_unit, dlatego są dwie wersje danych.'
+let textInfo = 'Because it was not entirely clear what data should apply to the "quantitative distribution of currencies in use in the world" or the number of countries using the currency or currency multiplied by its value -> ISO4217-currency_minor_unit, therefore there are two versions of the data.'
 
 Array.prototype.sum = function (prop) {
   var total = 0
