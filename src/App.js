@@ -110,6 +110,7 @@ export default class App extends React.Component {
       <div className="containerLoader" style={containerLoader}>
         <div className="countryd z-depth-0 project-summary thumb">
           <div className="countryd-content grey-text text-darken-3 containerPost">
+            <div className="title"> Task charts with data API</div>
             <div className="chartsContainer">
               <LineCharts data={dataList} />
             </div>
@@ -127,7 +128,7 @@ export default class App extends React.Component {
 
 function LineCharts(props) {
   return (
-    <LineChart width={1200} height={400} data={props.data}
+    <LineChart width={900} height={400} data={props.data}
       margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
       <countrytesianGrid strokeDasharray="3 3" />
       <XAxis tick={<CustomizedAxisTick />} type="category" interval="preserveStartEnd" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} dataKey="Year" />
@@ -141,9 +142,9 @@ function LineCharts(props) {
 
 function BarCharts(props) {
   return (
-    <BarChart width={1200} height={400} data={props.data}>
+    <BarChart width={900} height={400} data={props.data}>
       <countrytesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="key" />
+      <XAxis tick={<CustomizedAxisTick />} dataKey="key" />
       <YAxis />
       <Tooltip />
       <Legend />

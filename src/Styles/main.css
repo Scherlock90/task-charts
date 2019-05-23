@@ -25,11 +25,18 @@
 .containerLoader .thumb .containerPost {
   justify-content: center;
   align-content: center;
-  display: grid;
+  display: inline-grid;
 }
 
 .containerLoader .thumb .containerPost .chartsContainer {
   margin: 1em;
+}
+
+.containerLoader .thumb .containerPost .title {
+  font-size: 42px;
+  margin: 1em;
+  height: 30%;
+  width: 100%;
 }
 
 .backgroundCard {
