@@ -1,14 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label, Surface, Symbols } from 'recharts';
+import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label} from 'recharts';
 import './Styles/main.css';
 import * as d3 from "d3";
-import { OverlayTrigger, Popover } from "react-bootstrap";
 
 let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
 let continent = "Continent";
-let value = "Value";
 
 Array.prototype.sum = function (prop) {
   var total = 0
@@ -35,6 +33,18 @@ class CustomTooltip extends React.Component{
     return null;
   }
 };
+
+class CustomizedAxisTick extends React.Component {
+  render() {
+    const { x, y, stroke, payload } = this.props;
+
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text x={0} y={0} dy={4} textAnchor="end" fill="#666" fontSize="12px" transform="rotate(-25)">{payload.value}</text>
+      </g>
+    );
+  }
+}
 
 export default class App extends React.Component {
   constructor(props) {
@@ -181,19 +191,6 @@ function BarCharts(props) {
     </BarChart>
   )
 }
-
-class CustomizedAxisTick extends React.Component {
-  render() {
-    const { x, y, stroke, payload } = this.props;
-
-    return (
-      <g transform={`translate(${x},${y})`}>
-        <text x={0} y={0} dy={4} textAnchor="end" fill="#666" fontSize="12px" transform="rotate(-25)">{payload.value}</text>
-      </g>
-    );
-  }
-}
-
 const containerLoader = {
   display: 'flex',
   justifyContent: 'center',
