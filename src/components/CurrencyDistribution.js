@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
 import Button from 'react-bootstrap/Button';
-import './Styles/main.css';
 import * as d3 from "d3";
 
 let countryCode = "Country Code";
@@ -19,11 +18,10 @@ Array.prototype.sum = function (prop) {
   return total
 }
 
-export default class DataCharst extends React.Component {
+export default class CurrencyDistribution extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      population: [],
       minor: [],
       cities: [],
       countryInWorld: 0,
@@ -35,20 +33,6 @@ export default class DataCharst extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('https://pkgstore.datahub.io/core/population/population_json/data/43d34c2353cbd16a0aa8cadfb193af05/population_json.json')
-      .then(res => {
-        this.setState({
-          population: res.data,
-        })
-        console.log(res);
-      })
-      axios.get('https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json')
-      .then(res => {
-        this.setState({
-          cities: res.data,
-        })
-        console.log(res);
-      })
     axios.get('https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/471a2e653140ecdd7243cdcacfd66608/country-codes_json.json')
       .then(res => {
         let countryWithEuro = res.data.map(function (country) {
@@ -87,23 +71,9 @@ export default class DataCharst extends React.Component {
   }
 
   render() {
-    const { population, minor, countryWithEuro, countryInWorld, cities } = this.state;
-
-    const dataList = population.length ? (population.slice(11449, 11506)
-      .filter((populationData, i) => {
-        return (
-          <ul key={i}>
-            {populationData.Year}
-            {populationData.Value}
-          </ul>
-        );
-      })
-      .map(ee => ee)
-    ) : (
-        <div className="center">No data yet! </div>
-      )
+    const {  minor, countryWithEuro, countryInWorld, cities } = this.state;
       
-    const dataList2 = minor.length ? (minor
+    const dataList = minor.length ? (minor
       .filter((album, i) => {
         return (
           <ul key={i}>
@@ -118,16 +88,6 @@ export default class DataCharst extends React.Component {
       : (
         <div className="center">No data yet! </div>
       );
-      const dataList3 = population
-      .filter(function(usa) {
-        if(usa[countryCode] === "USA"){
-          return usa[countryCode]
-        } else if (usa[countryCode] === "ARB"){
-          return usa[countryCode]
-        }
-      })
-
-      console.log( dataList3);
 
     let expenseMetrics2 = d3.nest()
         .key(function (d) { return d.country; })
@@ -145,17 +105,13 @@ export default class DataCharst extends React.Component {
           [currencyMinor]: d3.sum(v, function (d) { return d[currencyMinor]; })
         };
       })
-      .entries(dataList2);
+      .entries(dataList);
     console.log((expenseMetrics));
 
     return (
-      <div className="containerLoader" style={containerLoader}>
+      <div className="containerLoader">
         <div className="countryd z-depth-0 project-summary thumb">
           <div className="countryd-content grey-text text-darken-3 containerPost">
-            <div className="title"> Task charts with data API</div>
-            <div className="chartsContainer">
-              <LineCharts data={dataList} />
-            </div>
             <div className="chartsContainer">
               <BarCharts data={expenseMetrics} />
             </div>
@@ -169,9 +125,6 @@ export default class DataCharst extends React.Component {
                 <Button variant="outline-primary" onClick={this.handleClickInfo}>Info</Button>
                 <div> {this.state.textInfo} </div>
               </div>
-            </div>
-            <div className="chartsContainer">
-              <BarCharts3 data={expenseMetrics2} />
             </div>
           </div>
         </div>
@@ -210,19 +163,6 @@ class CustomizedAxisTick extends React.Component {
   }
 }
 
-function LineCharts(props) {
-  return (
-    <LineChart width={900} height={400} data={props.data}
-      margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
-      <countrytesianGrid strokeDasharray="3 3" />
-      <XAxis tick={<CustomizedAxisTick />} type="category" interval="preserveStartEnd" label={{ value: 'Years', position: 'insideBottomRight', offset: -5 }} dataKey="Year" />
-      <YAxis interval="preserveStartEnd" type="number" domain={['auto', 'auto']} label={{ value: 'Population', angle: -90, position: 'insideLeft', offset: -40 }} />
-      <Tooltip content={<CustomTooltip />} />
-      <Legend verticalAlign="top" payload={[{ value: 'Population trend in Poland', type: 'line', color: 'rgb(136, 132, 216)' }]} />
-      <Line type="monotone" dataKey="Value" stroke="#8884d8" />
-    </LineChart>
-  )
-}
 
 function BarCharts(props) {
   return (
@@ -259,28 +199,4 @@ function BarCharts2(props) {
       <Bar dataKey="value.count" fill="#82ca9d" />
     </BarChart>
   )
-}
-function BarCharts3(props) {
-  const style={
-    padding: '0.2em'
-  }
-  return (
-    <BarChart width={900} height={400} data={props.data}>
-      <countrytesianGrid strokeDasharray="3 3" />
-      <XAxis tick={<CustomizedAxisTick />} dataKey="key" >
-        <Label value="Countries" offset={-5} position="insideBottomRight" />
-      </XAxis>
-      <YAxis>
-          <Label value="Number of cities" offset={0} angle={-90} position="insideLeft" />     
-      </YAxis>
-      <Tooltip content={<CustomTooltip />} />
-      <Legend verticalAlign="top" payload={[{ value: 'Number of cities in Countries', type: 'square', color: 'rgb(130, 202, 157)' }]} />
-      <Bar dataKey="value.count_cities" fill="#82ca9d" />
-    </BarChart>
-  )
-}
-
-const containerLoader = {
-  display: 'flex',
-  justifyContent: 'center',
 }

@@ -17,6 +17,7 @@ code {
 .containerLoader {
   text-align: center;
   height: -webkit-fill-available;
+  align-items: center;
 }
 
 .containerLoader .pointer {
