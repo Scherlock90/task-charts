@@ -8,6 +8,7 @@ import { OverlayTrigger, Popover } from "react-bootstrap";
 let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
 let continent = "Continent";
+let value = "Value";
 
 Array.prototype.sum = function (prop) {
   var total = 0
@@ -132,6 +133,24 @@ export default class App extends React.Component {
   }
 }
 
+class CustomTooltip extends React.Component{
+
+  render() {
+    const { active } = this.props;
+
+    if (active) {
+      const { payload, label } = this.props;
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`${label}: ${payload[0].value}`}</p>
+        </div>
+      );
+    }
+
+    return null;
+  }
+};
+
 function LineCharts(props) {
   return (
     <LineChart width={900} height={400} data={props.data}
@@ -139,7 +158,7 @@ function LineCharts(props) {
       <countrytesianGrid strokeDasharray="3 3" />
       <XAxis tick={<CustomizedAxisTick />} type="category" interval="preserveStartEnd" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} dataKey="Year" />
       <YAxis interval="preserveStartEnd" type="number" domain={['auto', 'auto']} label={{ value: 'Population', angle: -90, position: 'insideLeft', offset: -40 }} />
-      <Tooltip />
+      <Tooltip  content={<CustomTooltip/>}/>
       <Legend payload={[{ value: 'Population trend in Poland', type: 'line', color: 'rgb(136, 132, 216)' }]} />
       <Line type="monotone" dataKey="Value" stroke="#8884d8" />
     </LineChart>
@@ -156,7 +175,7 @@ function BarCharts(props) {
       <YAxis >
         <Label value="Currency distribution" offset={0} angle={-90} position="insideLeft" />
       </YAxis>
-      <Tooltip />
+      <Tooltip  content={<CustomTooltip/>}/>
       <Legend payload={[{ value: 'Currency distribution', type: 'square', color: 'rgb(130, 202, 157)' }]} />
       <Bar dataKey="value.ISO4217-currency_minor_unit" fill="#82ca9d" />
     </BarChart>
