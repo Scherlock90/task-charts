@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label} from 'recharts';
+import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
 import './Styles/main.css';
 import * as d3 from "d3";
 
@@ -16,7 +16,7 @@ Array.prototype.sum = function (prop) {
   return total
 }
 
-class CustomTooltip extends React.Component{
+class CustomTooltip extends React.Component {
 
   render() {
     const { active } = this.props;
@@ -46,7 +46,43 @@ class CustomizedAxisTick extends React.Component {
   }
 }
 
-export default class App extends React.Component {
+
+function LineCharts(props) {
+  return (
+    <LineChart width={900} height={400} data={props.data}
+      margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
+      <countrytesianGrid strokeDasharray="3 3" />
+      <XAxis tick={<CustomizedAxisTick />} type="category" interval="preserveStartEnd" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} dataKey="Year" />
+      <YAxis interval="preserveStartEnd" type="number" domain={['auto', 'auto']} label={{ value: 'Population', angle: -90, position: 'insideLeft', offset: -40 }} />
+      <Tooltip content={<CustomTooltip />} />
+      <Legend payload={[{ value: 'Population trend in Poland', type: 'line', color: 'rgb(136, 132, 216)' }]} />
+      <Line type="monotone" dataKey="Value" stroke="#8884d8" />
+    </LineChart>
+  )
+}
+
+function BarCharts(props) {
+  return (
+    <BarChart width={900} height={400} data={props.data}>
+      <countrytesianGrid strokeDasharray="3 3" />
+      <XAxis tick={<CustomizedAxisTick />} dataKey="key" >
+        <Label value="Minor" offset={-5} position="insideBottomRight" />
+      </XAxis>
+      <YAxis >
+        <Label value="Currency distribution" offset={0} angle={-90} position="insideLeft" />
+      </YAxis>
+      <Tooltip content={<CustomTooltip />} />
+      <Legend payload={[{ value: 'Currency distribution', type: 'square', color: 'rgb(130, 202, 157)' }]} />
+      <Bar dataKey="value.ISO4217-currency_minor_unit" fill="#82ca9d" />
+    </BarChart>
+  )
+}
+const containerLoader = {
+  display: 'flex',
+  justifyContent: 'center',
+}
+
+export default class DataCharst extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -97,7 +133,7 @@ export default class App extends React.Component {
     this.setState({ minor: arrayCopy });
   }
 
- 
+
   render() {
     const { population, minor, countryWithEuro, countryInWorld } = this.state;
 
@@ -114,7 +150,7 @@ export default class App extends React.Component {
     ) : (
         <div className="center">No data yet! </div>
       )
-    const dataList2 = minor
+    const dataList2 = minor.length ? (minor
       .filter((album, i) => {
         return (
           <ul key={i}>
@@ -125,20 +161,21 @@ export default class App extends React.Component {
         );
       })
       .map(ee => ee)
-      console.log(dataList2);
+    )
+      : (
+        <div className="center">No data yet! </div>
+      )
+    console.log(dataList2);
+
     let expenseMetrics = d3.nest()
       .key(function (d) { return d[currencyName]; })
       .rollup(function (v) {
-        if([currencyMinor] === 'null'){
-          [currencyName] = 0
-          console.log('działa');
-        }
         return {
           count: v.length,
-          [currencyMinor]: d3.sum(v, function (d) { return d[currencyMinor]; })          
+          [currencyMinor]: d3.sum(v, function (d) { return d[currencyMinor]; })
         };
       })
-      .entries(minor);
+      .entries(dataList2);
     console.log((expenseMetrics));
 
     return (
@@ -159,39 +196,4 @@ export default class App extends React.Component {
       </div>
     )
   }
-}
-
-function LineCharts(props) {
-  return (
-    <LineChart width={900} height={400} data={props.data}
-      margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
-      <countrytesianGrid strokeDasharray="3 3" />
-      <XAxis tick={<CustomizedAxisTick />} type="category" interval="preserveStartEnd" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} dataKey="Year" />
-      <YAxis interval="preserveStartEnd" type="number" domain={['auto', 'auto']} label={{ value: 'Population', angle: -90, position: 'insideLeft', offset: -40 }} />
-      <Tooltip  content={<CustomTooltip/>}/>
-      <Legend payload={[{ value: 'Population trend in Poland', type: 'line', color: 'rgb(136, 132, 216)' }]} />
-      <Line type="monotone" dataKey="Value" stroke="#8884d8" />
-    </LineChart>
-  )
-}
-
-function BarCharts(props) {
-  return (
-    <BarChart width={900} height={400} data={props.data}>
-      <countrytesianGrid strokeDasharray="3 3" />
-      <XAxis tick={<CustomizedAxisTick />} dataKey="key" >
-        <Label value="Minor" offset={-5} position="insideBottomRight" />
-      </XAxis>
-      <YAxis >
-        <Label value="Currency distribution" offset={0} angle={-90} position="insideLeft" />
-      </YAxis>
-      <Tooltip  content={<CustomTooltip/>}/>
-      <Legend payload={[{ value: 'Currency distribution', type: 'square', color: 'rgb(130, 202, 157)' }]} />
-      <Bar dataKey="value.ISO4217-currency_minor_unit" fill="#82ca9d" />
-    </BarChart>
-  )
-}
-const containerLoader = {
-  display: 'flex',
-  justifyContent: 'center',
 }
