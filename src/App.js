@@ -1,12 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import { BarChart, LineChart, Line, countrytesianGrid, Tooltip, Legend, XAxis, YAxis, Bar } from 'recharts';
+import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar } from 'recharts';
 import './Styles/main.css';
 import * as d3 from "d3";
 
-let displayName = "CLDR display name";
-let conutrCode = "Country Code";
-let countryName = "Country Name";
 let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
 let continent = "Continent";
@@ -19,45 +16,12 @@ Array.prototype.sum = function (prop) {
   return total
 }
 
-// function groupBy(list, keyGetter) {
-//   const map = new Map();
-//   list.forEach((item) => {
-//     const key = keyGetter(item);
-//     const collection = map.get(key);
-//     if (!collection) {
-//       map.set(key, [item]);
-//     } else {
-//       collection.push(item);
-//     }
-//   });
-//   return map;
-// }
-
-function sumProperty(arr, type) {
-  return arr.reduce((total, obj) => {
-    if (typeof obj[type] === 'string') {
-      return total + Number(obj[type]);
-    } 
-    return total + obj[type];
-  }, 0);
-}
-
-const count = function (ary, classifier) {
-  classifier = classifier || String;
-  return ary.reduce(function (counter, item) {
-      var p = classifier(item);
-      counter[p] = counter.hasOwnProperty(p) ? counter[p] + 1 : 1;
-      return counter;
-  }, {})
-};
-
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       population: [],
       minor: [],
-      counts: [],
       countryInWorld: 0,
       countryWithEuro: 0,
     }
@@ -86,8 +50,6 @@ export default class App extends React.Component {
           countryInWorld: countryInTheWorld.length,
         });
         this.sortBy(currencyName);
-        // console.log(countryWithEuro);
-        // console.log(countryInTheWorld);
       })
   }
 
@@ -104,19 +66,19 @@ export default class App extends React.Component {
     arrayCopy.sort(this.compareBy(key));
     this.setState({ minor: arrayCopy });
   }
-  
+
   render() {
-    const { population, minor, counts, countryWithEuro, countryInWorld } = this.state;
+    const { population, minor, countryWithEuro, countryInWorld } = this.state;
 
     const dataList = population.length ? (population.slice(11449, 11506)
       .filter((populationData, i) => {
-      return (
-        <ul key={i}>
-          {populationData.Year}
-          {populationData.Value}
-        </ul>
-      );
-    })
+        return (
+          <ul key={i}>
+            {populationData.Year}
+            {populationData.Value}
+          </ul>
+        );
+      })
       .map(ee => ee)
     ) : (
         <div className="center">No data yet! </div>
@@ -132,72 +94,18 @@ export default class App extends React.Component {
         );
       })
       .map(ee => ee)
-      // .filter(function (hero) {
-      //   if (hero[currencyName] === hero[currencyName]) {
-      //     return hero[currencyName]
-      //   }
-      // });
-
-    const dataList3 = minor
-    .filter(function(hero) {
-      if(hero[currencyName] === "Euro"){
-        return hero[currencyName]
-      }
-    });
-    // const dataList4 = minor
-    //   .filter(function(hero) {
-    //     if (hero[continent] === "EU"){
-    //     return hero[continent]
-    //   }
-    // });
- 
-    // let result = [];
-    // dataList2.reduce( (res, value) => {
-    //   if (!res[value[currencyName]]) {
-    //     res[value[currencyName]] = { [currencyName]: value[currencyName], [currencyMinor]: value[currencyMinor] };
-    //     result.push(res[value[currencyName]])
-    //   }
-    //   res[value[currencyName]][currencyMinor] += value[currencyMinor];
-    //   return res;
-    // }, {});
-   
-    // console.log(result);
 
     let expenseMetrics = d3.nest()
-  .key(function(d) { return d[currencyName]; })
-  .rollup(function(v) { return {
-    count: v.length,
-    [currencyMinor]: d3.sum(v, function(d) { return d[currencyMinor]; })
-  }; })
-  .entries(minor);
-console.log((expenseMetrics));
+      .key(function (d) { return d[currencyName]; })
+      .rollup(function (v) {
+        return {
+          count: v.length,
+          [currencyMinor]: d3.sum(v, function (d) { return d[currencyMinor]; })
+        };
+      })
+      .entries(minor);
+    console.log((expenseMetrics));
 
-  //  const countUnitsNameOfCountry = count(minor, function (item) {
-  //     return item[currencyName]
-  // });
-  // console.log(countUnitsNameOfCountry);
-    // let sumThisSameCurrency = minor.map(function (country) {
-    //   return country[currencyName] === "Euro"
-    // }).reduce(function (previousValue, currentValue) {
-    //   return previousValue + currentValue
-    // }, 0);
-    // console.log(sumThisSameCurrency);
-
-    // const grouped = groupBy(dataList4, pet => pet[currencyName]);
-    // const grouped2 = groupBy(dataList4, pet => pet[continent]);
-    let totalAmount = ( sumProperty(dataList3, currencyMinor) ); 
-    // // let totalCountry = (sumProperty(dataList2, currencyName ))
-    // let totEuro = dataList3.sum(currencyName).length;
-    // const group = dataList2.groupBy(currencyName);
-    // console.log(minor);
-    // console.log(minor.length);
-    // console.log(totEuro.length);
-    console.log("Value euro coin: " + totalAmount );
-    // console.log("Country with euro: " + totEuro);
-    // console.log("Total number of country in the world: " + minor.length);
-    // console.log('Grouped by? ' +group);
-    // console.log(grouped.get("Euro"));
-    // console.log(grouped2.get("EU"));
     return (
       <div className="containerLoader" style={containerLoader}>
         <div className="countryd z-depth-0 project-summary thumb">
@@ -219,7 +127,7 @@ console.log((expenseMetrics));
 
 function LineCharts(props) {
   return (
-    <LineChart width={900} height={250} data={props.data}
+    <LineChart width={1200} height={400} data={props.data}
       margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
       <countrytesianGrid strokeDasharray="3 3" />
       <XAxis tick={<CustomizedAxisTick />} type="category" interval="preserveStartEnd" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} dataKey="Year" />
@@ -233,13 +141,12 @@ function LineCharts(props) {
 
 function BarCharts(props) {
   return (
-    <BarChart width={900} height={250} data={props.data}>
+    <BarChart width={1200} height={400} data={props.data}>
       <countrytesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="key" />
       <YAxis />
       <Tooltip />
       <Legend />
-      {/* <Bar dataKey="ISO4217-currency_name" fill="#8884d8" /> */}
       <Bar dataKey="value.ISO4217-currency_minor_unit" fill="#82ca9d" />
     </BarChart>
   )

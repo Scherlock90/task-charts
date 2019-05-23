@@ -1,5 +1,6 @@
 .containerLoader {
   text-align: center;
+  height: -webkit-fill-available;
 }
 
 .containerLoader .pointer {
