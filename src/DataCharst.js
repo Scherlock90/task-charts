@@ -106,8 +106,7 @@ export default class DataCharst extends React.Component {
     )
       : (
         <div className="center">No data yet! </div>
-      )
-    console.log(dataList2);
+      );
 
     let expenseMetrics = d3.nest()
       .key(function (d) { return d[currencyName]; })
@@ -154,7 +153,7 @@ class CustomTooltip extends React.Component {
   render() {
     const { active } = this.props;
 
-    if (active) {
+    if (active === this.props.payload) {
       const { payload, label } = this.props;
       return (
         <div className="custom-tooltip">
@@ -178,7 +177,6 @@ class CustomizedAxisTick extends React.Component {
     );
   }
 }
-
 
 function LineCharts(props) {
   return (
@@ -210,6 +208,7 @@ function BarCharts(props) {
     </BarChart>
   )
 }
+
 function BarCharts2(props) {
   const style={
     padding: '0.2em'
@@ -229,6 +228,7 @@ function BarCharts2(props) {
     </BarChart>
   )
 }
+
 const containerLoader = {
   display: 'flex',
   justifyContent: 'center',
