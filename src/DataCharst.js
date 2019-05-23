@@ -151,15 +151,15 @@ export default class DataCharst extends React.Component {
 class CustomTooltip extends React.Component {
 
   render() {
-    const { active } = this.props;
+    const { active, payload, label } = this.props;
 
-    if (active === this.props.payload) {
-      const { payload, label } = this.props;
+    if (active) {  
+      if(payload) {   
       return (
         <div className="custom-tooltip">
           <p className="label">{`${label}: ${payload[0].value}`}</p>
         </div>
-      );
+      );}
     }
 
     return null;
