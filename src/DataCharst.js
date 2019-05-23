@@ -1,12 +1,14 @@
 import React from 'react';
 import axios from 'axios';
 import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
+import Button from 'react-bootstrap/Button';
 import './Styles/main.css';
 import * as d3 from "d3";
 
 let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
 let continent = "Continent";
+let textInfo = 'Ponieważ nie do końca było sprecyzowane czego dane mają dotyczyć "rozkład ilościowy walut używanych na świecie" czy ma to być ilość krajów posługujących się walutą czy waluta pomnożona przez jej wartość -> ISO4217-currency_minor_unit, dlatego są dwie wersje danych.'
 
 Array.prototype.sum = function (prop) {
   var total = 0
@@ -14,72 +16,6 @@ Array.prototype.sum = function (prop) {
     total += this[i][prop]
   }
   return total
-}
-
-class CustomTooltip extends React.Component {
-
-  render() {
-    const { active } = this.props;
-
-    if (active) {
-      const { payload, label } = this.props;
-      return (
-        <div className="custom-tooltip">
-          <p className="label">{`${label}: ${payload[0].value}`}</p>
-        </div>
-      );
-    }
-
-    return null;
-  }
-};
-
-class CustomizedAxisTick extends React.Component {
-  render() {
-    const { x, y, stroke, payload } = this.props;
-
-    return (
-      <g transform={`translate(${x},${y})`}>
-        <text x={0} y={0} dy={4} textAnchor="end" fill="#666" fontSize="12px" transform="rotate(-25)">{payload.value}</text>
-      </g>
-    );
-  }
-}
-
-
-function LineCharts(props) {
-  return (
-    <LineChart width={900} height={400} data={props.data}
-      margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
-      <countrytesianGrid strokeDasharray="3 3" />
-      <XAxis tick={<CustomizedAxisTick />} type="category" interval="preserveStartEnd" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} dataKey="Year" />
-      <YAxis interval="preserveStartEnd" type="number" domain={['auto', 'auto']} label={{ value: 'Population', angle: -90, position: 'insideLeft', offset: -40 }} />
-      <Tooltip content={<CustomTooltip />} />
-      <Legend payload={[{ value: 'Population trend in Poland', type: 'line', color: 'rgb(136, 132, 216)' }]} />
-      <Line type="monotone" dataKey="Value" stroke="#8884d8" />
-    </LineChart>
-  )
-}
-
-function BarCharts(props) {
-  return (
-    <BarChart width={900} height={400} data={props.data}>
-      <countrytesianGrid strokeDasharray="3 3" />
-      <XAxis tick={<CustomizedAxisTick />} dataKey="key" >
-        <Label value="Minor" offset={-5} position="insideBottomRight" />
-      </XAxis>
-      <YAxis >
-        <Label value="Currency distribution" offset={0} angle={-90} position="insideLeft" />
-      </YAxis>
-      <Tooltip content={<CustomTooltip />} />
-      <Legend payload={[{ value: 'Currency distribution', type: 'square', color: 'rgb(130, 202, 157)' }]} />
-      <Bar dataKey="value.ISO4217-currency_minor_unit" fill="#82ca9d" />
-    </BarChart>
-  )
-}
-const containerLoader = {
-  display: 'flex',
-  justifyContent: 'center',
 }
 
 export default class DataCharst extends React.Component {
@@ -90,6 +26,7 @@ export default class DataCharst extends React.Component {
       minor: [],
       countryInWorld: 0,
       countryWithEuro: 0,
+      textInfo: ''
     }
     this.compareBy.bind(this);
     this.sortBy.bind(this);
@@ -132,7 +69,12 @@ export default class DataCharst extends React.Component {
     arrayCopy.sort(this.compareBy(key));
     this.setState({ minor: arrayCopy });
   }
-
+  handleClickInfo = (e) => {
+    e.preventDefault();
+    this.setState({
+      textInfo: textInfo
+    })
+  }
 
   render() {
     const { population, minor, countryWithEuro, countryInWorld } = this.state;
@@ -189,11 +131,105 @@ export default class DataCharst extends React.Component {
             <div className="chartsContainer">
               <BarCharts data={expenseMetrics} />
             </div>
-            <div>Countries with the euro currency: {countryWithEuro} </div>
-            <div>The number of countries in the world: {countryInWorld} </div>
+            <div className="chartsContainer">
+              <BarCharts2 data={expenseMetrics} />
+            </div>
+            <div className="containerInfoMain">
+              <div className="containerInfo">
+                <div>Countries with the euro currency: {countryWithEuro} </div>
+                <div>The number of countries in the world: {countryInWorld} </div>
+                <Button variant="outline-primary" onClick={this.handleClickInfo}>Info</Button>
+                <div> {this.state.textInfo} </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     )
   }
+}
+
+class CustomTooltip extends React.Component {
+
+  render() {
+    const { active } = this.props;
+
+    if (active) {
+      const { payload, label } = this.props;
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`${label}: ${payload[0].value}`}</p>
+        </div>
+      );
+    }
+
+    return null;
+  }
+};
+
+class CustomizedAxisTick extends React.Component {
+  render() {
+    const { x, y, stroke, payload } = this.props;
+
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text x={0} y={0} dy={4} textAnchor="end" fill="#666" fontSize="12px" transform="rotate(-25)">{payload.value}</text>
+      </g>
+    );
+  }
+}
+
+
+function LineCharts(props) {
+  return (
+    <LineChart width={900} height={400} data={props.data}
+      margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
+      <countrytesianGrid strokeDasharray="3 3" />
+      <XAxis tick={<CustomizedAxisTick />} type="category" interval="preserveStartEnd" label={{ value: 'Years', position: 'insideBottomRight', offset: -5 }} dataKey="Year" />
+      <YAxis interval="preserveStartEnd" type="number" domain={['auto', 'auto']} label={{ value: 'Population', angle: -90, position: 'insideLeft', offset: -40 }} />
+      <Tooltip content={<CustomTooltip />} />
+      <Legend verticalAlign="top" payload={[{ value: 'Population trend in Poland', type: 'line', color: 'rgb(136, 132, 216)' }]} />
+      <Line type="monotone" dataKey="Value" stroke="#8884d8" />
+    </LineChart>
+  )
+}
+
+function BarCharts(props) {
+  return (
+    <BarChart width={900} height={400} data={props.data}>
+      <countrytesianGrid strokeDasharray="3 3" />
+      <XAxis tick={<CustomizedAxisTick />} dataKey="key" >
+        <Label value="Minor" offset={-5} position="insideBottomRight" />
+      </XAxis>
+      <YAxis>
+        <Label value="Currency distribution" offset={0} angle={-90} position="insideLeft" />
+      </YAxis>
+      <Tooltip content={<CustomTooltip />} />
+      <Legend verticalAlign="top" payload={[{ value: 'Currency distribution', type: 'square', color: 'rgb(130, 202, 157)' }]} />
+      <Bar dataKey="value.ISO4217-currency_minor_unit" fill="#82ca9d" />
+    </BarChart>
+  )
+}
+function BarCharts2(props) {
+  const style={
+    padding: '0.2em'
+  }
+  return (
+    <BarChart width={900} height={400} data={props.data}>
+      <countrytesianGrid strokeDasharray="3 3" />
+      <XAxis tick={<CustomizedAxisTick />} dataKey="key" >
+        <Label value="Minor" offset={-5} position="insideBottomRight" />
+      </XAxis>
+      <YAxis>
+          <Label value="Countries using currency" offset={0} angle={-90} position="insideLeft" />     
+      </YAxis>
+      <Tooltip content={<CustomTooltip />} />
+      <Legend verticalAlign="top" payload={[{ value: 'Number of countries using the currency', type: 'square', color: 'rgb(130, 202, 157)' }]} />
+      <Bar dataKey="value.count" fill="#82ca9d" />
+    </BarChart>
+  )
+}
+const containerLoader = {
+  display: 'flex',
+  justifyContent: 'center',
 }
