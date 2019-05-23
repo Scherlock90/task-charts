@@ -1,8 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
+import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label, Surface, Symbols } from 'recharts';
 import './Styles/main.css';
 import * as d3 from "d3";
+import { OverlayTrigger, Popover } from "react-bootstrap";
 
 let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
@@ -67,6 +68,7 @@ export default class App extends React.Component {
     this.setState({ minor: arrayCopy });
   }
 
+ 
   render() {
     const { population, minor, countryWithEuro, countryInWorld } = this.state;
 
@@ -94,7 +96,7 @@ export default class App extends React.Component {
         );
       })
       .map(ee => ee)
-
+      console.log(dataList2);
     let expenseMetrics = d3.nest()
       .key(function (d) { return d[currencyName]; })
       .rollup(function (v) {
@@ -138,21 +140,9 @@ function LineCharts(props) {
       <XAxis tick={<CustomizedAxisTick />} type="category" interval="preserveStartEnd" label={{ value: 'Years', position: 'insideBottomRight', offset: -10 }} dataKey="Year" />
       <YAxis interval="preserveStartEnd" type="number" domain={['auto', 'auto']} label={{ value: 'Population', angle: -90, position: 'insideLeft', offset: -40 }} />
       <Tooltip />
-      <Legend />
+      <Legend payload={[{ value: 'Population trend in Poland', type: 'line', color: 'rgb(136, 132, 216)' }]} />
       <Line type="monotone" dataKey="Value" stroke="#8884d8" />
     </LineChart>
-  )
-}
-function CustomizedLegend (props) {
-  const { payload } = props;
-  return(
-<ul>
-      {
-        payload.map((entry, index) => (
-          <li key={`item-${index}`}>{entry.value}</li>
-        ))
-      }
-    </ul>
   )
 }
 
@@ -167,7 +157,7 @@ function BarCharts(props) {
         <Label value="Currency distribution" offset={0} angle={-90} position="insideLeft" />
       </YAxis>
       <Tooltip />
-      <Legend content={CustomizedLegend} />
+      <Legend payload={[{ value: 'Currency distribution', type: 'square', color: 'rgb(130, 202, 157)' }]} />
       <Bar dataKey="value.ISO4217-currency_minor_unit" fill="#82ca9d" />
     </BarChart>
   )
