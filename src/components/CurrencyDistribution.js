@@ -112,6 +112,7 @@ export default class CurrencyDistribution extends React.Component {
       <div className="containerLoader">
         <div className="countryd z-depth-0 project-summary thumb">
           <div className="countryd-content grey-text text-darken-3 containerPost">
+          <div className="title"> Currency distribution</div>
             <div className="chartsContainer">
               <BarCharts data={expenseMetrics} />
             </div>

@@ -4,16 +4,10 @@ import {
     Collapse,
     Navbar,
     NavbarToggler,
-    NavbarBrand,
     Nav,
     NavItem,
-    NavLink,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem } from 'reactstrap';
+    NavLink} from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
-import scrollToComponent from 'react-scroll-to-component';
 
 export default class Menu extends React.Component {
 constructor(props) {
@@ -34,11 +28,13 @@ constructor(props) {
       
 	render () {
 		return (
-            <Navbar light expand="md">                
-                <NavbarBrand to="/home"  activeClassName="active" tag={RRNavLink}> Charts</NavbarBrand>
+            <Navbar light expand="md">               
                    <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
                      <Collapse isOpen={!this.state.collapsed} navbar>
                         <Nav navbar>
+                        <NavItem>
+                            <NavLink to="/home"  activeClassName="active" tag={RRNavLink} onClick={ () => this.pageOpenTop()}>Home</NavLink>
+                        </NavItem>
                         <NavItem>
                             <NavLink to="/population-trend"  activeClassName="active" tag={RRNavLink} onClick={ () => this.pageOpenTop()}>Population trend</NavLink>
                         </NavItem>

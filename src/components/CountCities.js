@@ -67,6 +67,7 @@ export default class CountCities extends React.Component {
       <div className="containerLoader" style={containerLoader}>
         <div className="countryd z-depth-0 project-summary thumb">
           <div className="countryd-content grey-text text-darken-3 containerPost">
+            <div className="title"> Count Cities</div>
             <div className="chartsContainer">
               <BarCharts3 data={expenseMetrics2} />
             </div>

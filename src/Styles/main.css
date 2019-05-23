@@ -65,3 +65,7 @@ code {
   height: auto;
   width: 600px;
 }
+
+.linkTo {
+  padding: 0;
+}

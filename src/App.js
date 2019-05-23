@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import Content from './components/Content';
-import Footer from './components/Footer';
 import Menu from './components/Menu';
 
 class App extends Component {
-  goToPage = (pageNumber) => {
-    this.reactPageScroller.goToPage(pageNumber);
-  }
+
   render() {
     return (
       <div className="App">
@@ -20,7 +17,7 @@ class App extends Component {
 }
 
 const styleContent = {
-  margin: '5em',
+  margin: '1em',
   padding: '3em',
   display: 'flex',
   justifyContent: 'center'
