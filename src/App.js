@@ -18,6 +18,24 @@ Array.prototype.sum = function (prop) {
   return total
 }
 
+class CustomTooltip extends React.Component{
+
+  render() {
+    const { active } = this.props;
+
+    if (active) {
+      const { payload, label } = this.props;
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`${label}: ${payload[0].value}`}</p>
+        </div>
+      );
+    }
+
+    return null;
+  }
+};
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -132,24 +150,6 @@ export default class App extends React.Component {
     )
   }
 }
-
-class CustomTooltip extends React.Component{
-
-  render() {
-    const { active } = this.props;
-
-    if (active) {
-      const { payload, label } = this.props;
-      return (
-        <div className="custom-tooltip">
-          <p className="label">{`${label}: ${payload[0].value}`}</p>
-        </div>
-      );
-    }
-
-    return null;
-  }
-};
 
 function LineCharts(props) {
   return (
