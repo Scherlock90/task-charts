@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { BarChart, LineChart, Line, countrytesianGrid, Tooltip, Legend, XAxis, YAxis, Bar } from 'recharts';
-import './Styles/main.css'
+import './Styles/main.css';
+import * as d3 from "d3";
 
 let displayName = "CLDR display name";
 let conutrCode = "Country Code";
@@ -36,10 +37,11 @@ function sumProperty(arr, type) {
   return arr.reduce((total, obj) => {
     if (typeof obj[type] === 'string') {
       return total + Number(obj[type]);
-    }
+    } 
     return total + obj[type];
   }, 0);
 }
+
 const count = function (ary, classifier) {
   classifier = classifier || String;
   return ary.reduce(function (counter, item) {
@@ -48,7 +50,6 @@ const count = function (ary, classifier) {
       return counter;
   }, {})
 };
-
 
 export default class App extends React.Component {
   constructor(props) {
@@ -85,8 +86,8 @@ export default class App extends React.Component {
           countryInWorld: countryInTheWorld.length,
         });
         this.sortBy(currencyName);
-        console.log(countryWithEuro);
-        console.log(countryInTheWorld);
+        // console.log(countryWithEuro);
+        // console.log(countryInTheWorld);
       })
   }
 
@@ -120,49 +121,61 @@ export default class App extends React.Component {
     ) : (
         <div className="center">No data yet! </div>
       )
-    // const dataList2 = minor
-    //   .filter((album, i) => {
-    //     return (
-    //       <ul key={album.id}>
-    //         {album[currencyMinor]}
-    //         {album[currencyName]}
-    //         {album[continent]}
-    //       </ul>
-    //     );
-    //   })
-    //   .map(ee => ee)
+    const dataList2 = minor
+      .filter((album, i) => {
+        return (
+          <ul key={i}>
+            {album[currencyMinor]}
+            {album[currencyName]}
+            {album[continent]}
+          </ul>
+        );
+      })
+      .map(ee => ee)
       // .filter(function (hero) {
       //   if (hero[currencyName] === hero[currencyName]) {
       //     return hero[currencyName]
       //   }
       // });
 
-    // const dataList3 = minor
-    // .filter(function(hero) {
-    //   if(hero[currencyName] === "Euro"){
-    //     return hero[currencyName]
-    //   }
-    // });
+    const dataList3 = minor
+    .filter(function(hero) {
+      if(hero[currencyName] === "Euro"){
+        return hero[currencyName]
+      }
+    });
     // const dataList4 = minor
     //   .filter(function(hero) {
     //     if (hero[continent] === "EU"){
     //     return hero[continent]
     //   }
     // });
-    let result = [];
-    minor.reduce(function (res, value) {
-      if (!res[value[currencyName]]) {
-        res[value[currencyName]] = { [currencyName]: value[currencyName], [currencyMinor]: value[currencyMinor] };
-        result.push(res[value[currencyName]])
-      }
-      res[value[currencyName]][currencyMinor] += value[currencyMinor];
-      return res;
-    }, {});
-    console.log(result);
-   const countUnitsNameOfCountry = count(minor, function (item) {
-      return item[currencyName]
-  });
-  console.log(countUnitsNameOfCountry);
+ 
+    // let result = [];
+    // dataList2.reduce( (res, value) => {
+    //   if (!res[value[currencyName]]) {
+    //     res[value[currencyName]] = { [currencyName]: value[currencyName], [currencyMinor]: value[currencyMinor] };
+    //     result.push(res[value[currencyName]])
+    //   }
+    //   res[value[currencyName]][currencyMinor] += value[currencyMinor];
+    //   return res;
+    // }, {});
+   
+    // console.log(result);
+
+    let expenseMetrics = d3.nest()
+  .key(function(d) { return d[currencyName]; })
+  .rollup(function(v) { return {
+    count: v.length,
+    [currencyMinor]: d3.sum(v, function(d) { return d[currencyMinor]; })
+  }; })
+  .entries(minor);
+console.log((expenseMetrics));
+
+  //  const countUnitsNameOfCountry = count(minor, function (item) {
+  //     return item[currencyName]
+  // });
+  // console.log(countUnitsNameOfCountry);
     // let sumThisSameCurrency = minor.map(function (country) {
     //   return country[currencyName] === "Euro"
     // }).reduce(function (previousValue, currentValue) {
@@ -172,14 +185,14 @@ export default class App extends React.Component {
 
     // const grouped = groupBy(dataList4, pet => pet[currencyName]);
     // const grouped2 = groupBy(dataList4, pet => pet[continent]);
-    // let totalAmount = ( sumProperty(dataList3, currencyMinor) ); 
+    let totalAmount = ( sumProperty(dataList3, currencyMinor) ); 
     // // let totalCountry = (sumProperty(dataList2, currencyName ))
     // let totEuro = dataList3.sum(currencyName).length;
     // const group = dataList2.groupBy(currencyName);
     // console.log(minor);
     // console.log(minor.length);
     // console.log(totEuro.length);
-    // console.log("Value euro coin: " + totalAmount );
+    console.log("Value euro coin: " + totalAmount );
     // console.log("Country with euro: " + totEuro);
     // console.log("Total number of country in the world: " + minor.length);
     // console.log('Grouped by? ' +group);
@@ -193,7 +206,7 @@ export default class App extends React.Component {
               <LineCharts data={dataList} />
             </div>
             <div className="chartsContainer">
-              <BarCharts data={result} />
+              <BarCharts data={expenseMetrics} />
             </div>
             <div>Countries with the euro currency: {countryWithEuro} </div>
             <div>The number of countries in the world: {countryInWorld} </div>
@@ -222,12 +235,12 @@ function BarCharts(props) {
   return (
     <BarChart width={900} height={250} data={props.data}>
       <countrytesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="ISO4217-currency_name" />
+      <XAxis dataKey="key" />
       <YAxis />
       <Tooltip />
       <Legend />
       {/* <Bar dataKey="ISO4217-currency_name" fill="#8884d8" /> */}
-      <Bar dataKey="ISO4217-currency_minor_unit" fill="#82ca9d" />
+      <Bar dataKey="value.ISO4217-currency_minor_unit" fill="#82ca9d" />
     </BarChart>
   )
 }
