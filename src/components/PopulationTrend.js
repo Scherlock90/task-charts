@@ -2,13 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
 import {Link} from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
-import * as d3 from "d3";
-
-let countryCode = "Country Code";
-let currencyName = "ISO4217-currency_name";
-let currencyMinor = "ISO4217-currency_minor_unit";
-let continent = "Continent";
+import BackArrow from '../images/back_arrow.jpg';
 
 Array.prototype.sum = function (prop) {
   var total = 0
@@ -73,13 +67,15 @@ export default class PopulationTrend extends React.Component {
       <div className="containerLoader" >
         <div className="countryd z-depth-0 project-summary thumb">
           <div className="countryd-content grey-text text-darken-3 containerPost">
-            <div>
-              <Link to='/'>Back</Link>
+            <div className="inlineClass">              
               <div className="title">Population trend</div>
             </div>          
             <div className="chartsContainer">
               <LineCharts data={dataList} />
             </div>
+            <div className="leftSide"> 
+              <Link to='/' className="linkTo"><img src={BackArrow} width={50} /> Back </Link>             
+            </div>             
           </div>
         </div>
       </div>

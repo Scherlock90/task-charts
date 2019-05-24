@@ -5,7 +5,6 @@ body {
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,7 +19,6 @@ body {
 //another code css
 .containerLoader{
     text-align: center;
-    height: -webkit-fill-available;
     align-items: center;
     .pointer{    
         opacity: 0;
@@ -42,6 +40,18 @@ body {
             justify-content: center;
             align-content: center;
             display: inline-grid;
+            .mainCont{
+                padding-top: 1em;
+            }
+            .inlineClass{
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .leftSide{
+                text-align: left;
+                margin: 1em;
+            }
             .chartsContainer{
                 margin: 1em;
             }
@@ -50,6 +60,15 @@ body {
                 margin: 1em;
                 height: 30%;
                 width: 100%;
+            }
+            .containerTitle{
+                height: 100px;
+                .title{
+                    font-size: 42px;
+                    margin: 1em;
+                    height: 30%;
+                    width: 100%;
+                }
             }
             .containerInfoMain{
                 display: inline-flex;
@@ -65,4 +84,5 @@ body {
 
 .linkTo{
     padding: 0 ;
+    color: #424242;
 }

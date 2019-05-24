@@ -3,8 +3,9 @@ import axios from 'axios';
 import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
 import Button from 'react-bootstrap/Button';
 import * as d3 from "d3";
+import {Link} from 'react-router-dom';
+import BackArrow from '../images/back_arrow.jpg';
 
-let countryCode = "Country Code";
 let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
 let continent = "Continent";
@@ -127,6 +128,9 @@ export default class CurrencyDistribution extends React.Component {
                 <div> {this.state.textInfo} </div>
               </div>
             </div>
+            <div className="leftSide"> 
+              <Link to='/' className="linkTo"><img src={BackArrow} width={50} /> Back </Link>             
+            </div>  
           </div>
         </div>
       </div>

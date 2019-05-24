@@ -10,9 +10,9 @@ export default function Home() {
         <div style={containerMain}>
             <Container style={container}>
                 <Row style={rowMain}>
-                    <Col sm style={colMain}> <Link to="/population-trend" className="linkTo" ><img src={LineChart} width={400} height={300} /> </Link> </Col>
-                    <Col sm style={colMain}> <Link to="/currency-distribution" className="linkTo"><img src={BarChart} width={400} height={300} /></Link> </Col>
-                    <Col sm style={colMain}> <Link to="/count-cities" className="linkTo"><img src={CitiesBarChart} width={400} height={300} /></Link> </Col>
+                    <Col sm style={colMain}> <Link to="/population-trend" className="linkTo" ><img src={LineChart} width={400} height={300} /> </Link> Population Trend </Col>
+                    <Col sm style={colMain}> <Link to="/currency-distribution" className="linkTo"><img src={BarChart} width={400} height={300} /></Link> Currency count </Col>
+                    <Col sm style={colMain}> <Link to="/count-cities" className="linkTo"><img src={CitiesBarChart} width={400} height={300} /></Link> Cities count</Col>
                 </Row>
             </Container>
         </div>
@@ -26,7 +26,8 @@ const containerMain = {
     width: '1200px',
     display: 'inline-flex',
     justifyContent: 'center',
-
+    alignItems: 'center',
+    alignSelf: 'center'
 }
 const colMain = {
     width: '30%',

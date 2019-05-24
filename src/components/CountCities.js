@@ -3,12 +3,8 @@ import axios from 'axios';
 import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
 import Button from 'react-bootstrap/Button';
 import * as d3 from "d3";
-
-let countryCode = "Country Code";
-let currencyName = "ISO4217-currency_name";
-let currencyMinor = "ISO4217-currency_minor_unit";
-let continent = "Continent";
-let textInfo = 'Because it was not entirely clear what data should apply to the "quantitative distribution of currencies in use in the world" or the number of countries using the currency or currency multiplied by its value -> ISO4217-currency_minor_unit, therefore there are two versions of the data.'
+import {Link} from 'react-router-dom';
+import BackArrow from '../images/back_arrow.jpg';
 
 Array.prototype.sum = function (prop) {
   var total = 0
@@ -67,10 +63,15 @@ export default class CountCities extends React.Component {
       <div className="containerLoader" style={containerLoader}>
         <div className="countryd z-depth-0 project-summary thumb">
           <div className="countryd-content grey-text text-darken-3 containerPost">
-            <div className="title"> Count Cities</div>
-            <div className="chartsContainer">
+            <div className="containerTitle">
+              <div className="title"> Count Cities</div>
+            </div>            
+            <div className="chartsContainer mainCont">
               <BarCharts3 data={expenseMetrics2} />
             </div>
+            <div className="leftSide"> 
+              <Link to='/' className="linkTo"><img src={BackArrow} width={50} /> Back </Link>             
+            </div>  
           </div>
         </div>
       </div>

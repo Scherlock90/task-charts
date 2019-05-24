@@ -8,7 +8,7 @@ import '../Styles/main.css';
 
 const Content = () => {
   return(
-      <div className="Content">
+      <div>
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/home" component={Home} />
