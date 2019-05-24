@@ -3,7 +3,9 @@ import Content from './components/Content';
 import Menu from './components/Menu';
 
 class App extends Component {
-
+  goToPage = (pageNumber) => {
+    this.reactPageScroller.goToPage(pageNumber);
+  }
   render() {
     return (
       <div className="App">

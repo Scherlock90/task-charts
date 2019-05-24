@@ -1,13 +1,16 @@
 nav {
 	background-color: rgb(255, 255, 255);
 	overflow: hidden;
-	color: rgb(255, 255, 255);
+	color: #9e9e9e;
 	padding: 1em;
 	border-bottom: rgb(255, 255, 255);
 	font-family: 'Century Gothic',Futura,'URW Gothic L',sans-serif;
 	}
 .navbar {
 	box-shadow: rgb(255, 255, 255);
+}
+nav ul a{
+	    color: black;
 }
 .nav-item{
   background-repeat: no-repeat;
@@ -78,7 +81,7 @@ nav.navbar{
     .navNarrow i {
 			float: left;
 			cursor: pointer;
-			color: #FFF;
+			color: #9e9e9e;
 		}
 
 		.navNarrow.narrowLinks {
