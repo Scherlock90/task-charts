@@ -28,26 +28,30 @@ constructor(props) {
       
 	render () {
 		return (
-            <Navbar light expand="md">               
-                   <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-                     <Collapse isOpen={!this.state.collapsed} navbar>
-                        <Nav navbar>
-                        <NavItem>
-                            <NavLink to="/home"  activeClassName="active" tag={RRNavLink} onClick={ () => this.pageOpenTop()}>Home</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink to="/population-trend"  activeClassName="active" tag={RRNavLink} onClick={ () => this.pageOpenTop()}>Population trend</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink to="/currency-distribution"  activeClassName="active" tag={RRNavLink} onClick={ () => this.pageOpenTop()}>Currency distribution</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink to="/count-cities"  activeClassName="active" tag={RRNavLink} onClick={ () => this.pageOpenTop()}>Count cities</NavLink>
-                        </NavItem>
+            <div className="menu-div">
+                <div className="text-to-small-smartphone">
+                    Charts with data
+                </div>
+                <Navbar light expand="md">
+                    <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
+                    <Collapse isOpen={!this.state.collapsed} navbar>
+                        <Nav  navbar>
+                            <NavItem>
+                                <NavLink to="/home" activeClassName="active" tag={RRNavLink} onClick={() => this.pageOpenTop()}>Home</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink to="/population-trend" activeClassName="active" tag={RRNavLink} onClick={() => this.pageOpenTop()}>Population trend</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink to="/currency-distribution" activeClassName="active" tag={RRNavLink} onClick={() => this.pageOpenTop()}>Currency distribution</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink to="/count-cities" activeClassName="active" tag={RRNavLink} onClick={() => this.pageOpenTop()}>Count cities</NavLink>
+                            </NavItem>
                         </Nav>
                     </Collapse>
-            </Navbar>
-            
+                </Navbar>
+            </div>
         );
     }
 }

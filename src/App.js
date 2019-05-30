@@ -10,7 +10,7 @@ class App extends Component {
     return (
       <div className="App">
         <Menu />
-        <div style={styleContent}>
+        <div className="content-main-own">
           <Content />
         </div>
       </div>

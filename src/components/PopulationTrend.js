@@ -6,7 +6,6 @@ import BackArrow from '../images/back_arrow.jpg';
 import * as d3 from "d3";
 
 let countryCode = 'Country Code';
-let countryName = 'Country Name';
 
 Array.prototype.sum = function (prop) {
   var total = 0
@@ -83,22 +82,6 @@ export default class PopulationTrend extends React.Component {
       .entries(population);
     console.log( expenseMetrics4);
 
-    
-    // let counts2 = population.filter(function (country) {
-    //   return country[countryCode] === "POL"
-    //   }
-    // )
-    // let counts3 = population.filter(function (country) {
-    //   return country[countryCode] === "USA"
-    //   }
-    // )
-    // let counts4 = population.filter(function (country) {
-    //   return country[countryCode] === "EUU"
-    //   }
-    // )
-    // console.log(counts2);
-    // console.log(counts3);
-    // console.log(counts4);
     return (
       <div className="containerLoader" >
         <div className="countryd z-depth-0 project-summary thumb">

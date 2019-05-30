@@ -1,9 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
-import Button from 'react-bootstrap/Button';
 import * as d3 from "d3";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import BackArrow from '../images/back_arrow.jpg';
 
 Array.prototype.sum = function (prop) {
@@ -25,7 +24,7 @@ export default class CountCities extends React.Component {
   }
 
   componentDidMount() {
-      axios.get('https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json')
+    axios.get('https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json')
       .then(res => {
         this.setState({
           cities: res.data,
@@ -50,12 +49,14 @@ export default class CountCities extends React.Component {
 
   render() {
     const { cities } = this.state;
-    
+
     let expenseMetrics2 = d3.nest()
-        .key(function (d) { return d.country; })
-        .rollup(function(v) { return {
-      count_cities: v.length,
-    }; })
+      .key(function (d) { return d.country; })
+      .rollup(function (v) {
+        return {
+          count_cities: v.length,
+        };
+      })
       .entries(cities);
     console.log((expenseMetrics2));
 
@@ -65,13 +66,13 @@ export default class CountCities extends React.Component {
           <div className="countryd-content grey-text text-darken-3 containerPost">
             <div className="containerTitle">
               <div className="title"> Count Cities</div>
-            </div>            
+            </div>
             <div className="chartsContainer mainCont">
               <BarCharts3 data={expenseMetrics2} />
             </div>
-            <div className="leftSide"> 
-              <Link to='/' className="linkTo"><img src={BackArrow} width={50} /> Back </Link>             
-            </div>  
+            <div className="leftSide">
+              <Link to='/' className="linkTo"><img src={BackArrow} width={50} /> Back </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -84,13 +85,14 @@ class CustomTooltip extends React.Component {
   render() {
     const { active, payload, label } = this.props;
 
-    if (active) {  
-      if(payload) {   
-      return (
-        <div className="custom-tooltip">
-          <p className="label">{`${label}: ${payload[0].value}`}</p>
-        </div>
-      );}
+    if (active) {
+      if (payload) {
+        return (
+          <div className="custom-tooltip">
+            <p className="label">{`${label}: ${payload[0].value}`}</p>
+          </div>
+        );
+      }
     }
 
     return null;
@@ -110,7 +112,7 @@ class CustomizedAxisTick extends React.Component {
 }
 
 function BarCharts3(props) {
-  const style={
+  const style = {
     padding: '0.2em'
   }
   return (
@@ -120,7 +122,7 @@ function BarCharts3(props) {
         <Label value="Countries" offset={-5} position="insideBottomRight" />
       </XAxis>
       <YAxis>
-          <Label value="Number of cities" offset={0} angle={-90} position="insideLeft" />     
+        <Label value="Number of cities" offset={0} angle={-90} position="insideLeft" />
       </YAxis>
       <Tooltip content={<CustomTooltip />} />
       <Legend verticalAlign="top" payload={[{ value: 'Number of cities in Countries', type: 'square', color: 'rgb(130, 202, 157)' }]} />
