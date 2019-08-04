@@ -179,7 +179,15 @@ function BarCharts3(props) {
       />
       <Legend
         verticalAlign="top"
-        payload={[{ value: 'Number of cities in Countries', type: 'square', color: 'rgb(130, 202, 157)' }]}
+        payload={
+          [
+            { 
+              value: 'Number of cities in Countries', 
+              type: 'square', 
+              color: 'rgb(130, 202, 157)' 
+            }
+          ]
+        }
       />
       <Bar
         dataKey="value.count_cities"
