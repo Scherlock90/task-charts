@@ -1,9 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
+import { BarChart, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
 import * as d3 from "d3";
 import { Link } from 'react-router-dom';
 import BackArrow from '../images/back_arrow.jpg';
+import ViewCountCities from './ViewComponents/ViewCountCities';
 
 Array.prototype.sum = function (prop) {
   var total = 0
@@ -12,6 +13,19 @@ Array.prototype.sum = function (prop) {
   }
   return total
 }
+
+const backToHome = (
+  <Link
+    to='/'
+    className="linkTo"
+  >
+    <img 
+      src={BackArrow}
+      width={50}
+    />
+    Back
+  </Link>
+)
 
 export default class CountCities extends React.Component {
   constructor(props) {
@@ -24,12 +38,12 @@ export default class CountCities extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json')
+    axios
+      .get('https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json')
       .then(res => {
         this.setState({
           cities: res.data,
         })
-        console.log(res);
       })
   }
 
@@ -43,7 +57,8 @@ export default class CountCities extends React.Component {
 
   sortBy(key) {
     let arrayCopy = [...this.state.minor];
-    arrayCopy.sort(this.compareBy(key));
+    arrayCopy
+      .sort(this.compareBy(key));
     this.setState({ minor: arrayCopy });
   }
 
@@ -58,24 +73,28 @@ export default class CountCities extends React.Component {
         };
       })
       .entries(cities);
-    console.log((expenseMetrics2));
 
+    const loader = <div style={styleLoader}>Data is loading...</div>;
     return (
-      <div className="containerLoader" style={containerLoader}>
-        <div className="countryd z-depth-0 project-summary thumb">
-          <div className="countryd-content grey-text text-darken-3 containerPost">
-            <div className="containerTitle">
-              <div className="title"> Count Cities</div>
-            </div>
-            <div className="chartsContainer mainCont">
-              <BarCharts3 data={expenseMetrics2} />
-            </div>
-            <div className="leftSide">
-              <Link to='/' className="linkTo"><img src={BackArrow} width={50} /> Back </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      <>
+        <ViewCountCities 
+          backTohome={backToHome} 
+          title={
+            expenseMetrics2.length > 0
+              ?
+                "Count Cities"
+              :
+                null
+          } 
+          data={
+            expenseMetrics2.length > 0
+              ?
+                <BarCharts3 data={expenseMetrics2} />
+              :
+                loader
+          }
+        />
+      </>
     )
   }
 }
@@ -88,50 +107,89 @@ class CustomTooltip extends React.Component {
     if (active) {
       if (payload) {
         return (
-          <div className="custom-tooltip">
-            <p className="label">{`${label}: ${payload[0].value}`}</p>
+          <div
+            className="custom-tooltip"
+          >
+            <p
+              className="label"
+            >
+              {`${label}: ${payload[0].value}`}
+            </p>
           </div>
         );
       }
     }
-
     return null;
   }
 };
 
 class CustomizedAxisTick extends React.Component {
   render() {
-    const { x, y, stroke, payload } = this.props;
+    const { x, y, payload } = this.props;
 
     return (
-      <g transform={`translate(${x},${y})`}>
-        <text x={0} y={0} dy={4} textAnchor="end" fill="#666" fontSize="12px" transform="rotate(-25)">{payload.value}</text>
+      <g
+        transform={`translate(${x},${y})`}
+      >
+        <text
+          x={0}
+          y={0}
+          dy={4}
+          textAnchor="end"
+          fill="#666"
+          fontSize="12px"
+          transform="rotate(-25)">
+          {payload.value}
+        </text>
       </g>
     );
   }
 }
 
 function BarCharts3(props) {
-  const style = {
-    padding: '0.2em'
-  }
   return (
-    <BarChart width={900} height={400} data={props.data}>
-      <countrytesianGrid strokeDasharray="3 3" />
-      <XAxis tick={<CustomizedAxisTick />} dataKey="key" >
-        <Label value="Countries" offset={-5} position="insideBottomRight" />
+    <BarChart
+      width={900}
+      height={400}
+      data={props.data}
+    >
+      <countrytesianGrid
+        strokeDasharray="3 3"
+      />
+      <XAxis
+        tick={<CustomizedAxisTick />}
+        dataKey="key"
+      >
+        <Label
+          value="Countries"
+          offset={-5}
+          position="insideBottomRight"
+        />
       </XAxis>
       <YAxis>
-        <Label value="Number of cities" offset={0} angle={-90} position="insideLeft" />
+        <Label
+          value="Number of cities"
+          offset={0}
+          angle={-90}
+          position="insideLeft"
+        />
       </YAxis>
-      <Tooltip content={<CustomTooltip />} />
-      <Legend verticalAlign="top" payload={[{ value: 'Number of cities in Countries', type: 'square', color: 'rgb(130, 202, 157)' }]} />
-      <Bar dataKey="value.count_cities" fill="#82ca9d" />
+      <Tooltip
+        content={<CustomTooltip />}
+      />
+      <Legend
+        verticalAlign="top"
+        payload={[{ value: 'Number of cities in Countries', type: 'square', color: 'rgb(130, 202, 157)' }]}
+      />
+      <Bar
+        dataKey="value.count_cities"
+        fill="#82ca9d"
+      />
     </BarChart>
   )
 }
 
-const containerLoader = {
-  display: 'flex',
-  justifyContent: 'center',
+const styleLoader = {
+  fontSize: '42px',
+  padding: '3rem'
 }
