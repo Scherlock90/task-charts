@@ -1,10 +1,10 @@
 import React from 'react';
 import axios from 'axios';
 import { BarChart, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
-import Button from 'react-bootstrap/Button';
 import * as d3 from "d3";
 import { Link } from 'react-router-dom';
-import BackArrow from '../Assets/back_arrow.jpg';
+import BackArrow from '../../assets/back_arrow.jpg';
+import ViewCurrencyDistribution from '../ViewComponents/ViewCurrencyDistribution';
 
 let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
@@ -24,7 +24,7 @@ const backToHome = (
     to='/'
     className="linkTo"
   >
-    <img
+    <img 
       src={BackArrow}
       width={50}
     />
@@ -47,23 +47,24 @@ export default class CurrencyDistribution extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/471a2e653140ecdd7243cdcacfd66608/country-codes_json.json')
-      .then(res => {
-        let countryWithEuro = res.data
-          .map(function (country) {
-            return country[currencyName] === "Euro"
-          })
-          .reduce(function (previousValue, currentValue) {
-            return previousValue + currentValue
+    axios
+      .get('https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/471a2e653140ecdd7243cdcacfd66608/country-codes_json.json')
+        .then(res => {
+          let countryWithEuro = res.data
+            .map(function (country) {
+              return country[currencyName] === "Euro"
+            })
+            .reduce(function (previousValue, currentValue) {
+              return previousValue + currentValue
+            });
+          let countryInTheWorld = res.data;
+          this.setState({
+            minor: res.data,
+            countryWithEuro: countryWithEuro,
+            countryInWorld: countryInTheWorld.length,
           });
-        let countryInTheWorld = res.data;
-        this.setState({
-          minor: res.data,
-          countryWithEuro: countryWithEuro,
-          countryInWorld: countryInTheWorld.length,
-        });
-        this.sortBy(currencyName);
-      })
+          this.sortBy(currencyName);
+        })
   }
 
   compareBy(key) {
@@ -90,7 +91,7 @@ export default class CurrencyDistribution extends React.Component {
   render() {
     const { minor, countryWithEuro, countryInWorld } = this.state;
 
-    const dataList = minor.length ? (minor
+    const dataList = minor
       .filter((album, i) => {
         return (
           <ul key={i}>
@@ -100,11 +101,7 @@ export default class CurrencyDistribution extends React.Component {
           </ul>
         );
       })
-      .map(ee => ee)
-    )
-      : (
-        <div className="center">No data yet! </div>
-      );
+      .map(ee => ee)    
 
     let expenseMetrics = d3.nest()
       .key(function (d) { return d[currencyName]; })
@@ -119,30 +116,24 @@ export default class CurrencyDistribution extends React.Component {
     const loader = <div style={styleLoader}>Data is loading...</div>;
 
     return (
-      <div className="containerLoader">
-        <div className="countryd z-depth-0 project-summary thumb">
-          <div className="countryd-content grey-text text-darken-3 containerPost">
-            <div className="title"> Currency distribution</div>
-            <div className="chartsContainer">
-              <BarCharts data={expenseMetrics} />
-            </div>
-            <div className="chartsContainer">
-              <BarCharts2 data={expenseMetrics} />
-            </div>
-            <div className="containerInfoMain">
-              <div className="containerInfo">
-                <div>Countries with the euro currency: {countryWithEuro} </div>
-                <div>The number of countries in the world: {countryInWorld} </div>
-                <Button variant="outline-primary" onClick={this.handleClickInfo}>Info</Button>
-                <div> {this.state.textInfo} </div>
-              </div>
-            </div>
-            <div className="leftSide">
-              <Link to='/' className="linkTo"><img src={BackArrow} width={50} /> Back </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      <>
+        {
+          expenseMetrics.length 
+            ?
+              <ViewCurrencyDistribution 
+                title={"Currency distribution"}
+                dataOne={<BarCharts data={expenseMetrics} />}
+                dataTwo={<BarCharts2 data={expenseMetrics} />}
+                countryWithEuro={countryWithEuro}
+                countryInTheWorld={countryInWorld}
+                handleClickInfo={this.handleClickInfo}
+                textInfo={this.state.textInfo}
+                backToHome={backToHome}
+              />
+            :
+              loader
+        }
+      </>
     )
   }
 }

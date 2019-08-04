@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Content from './components/Content';
-import Menu from './components/Menu';
+import Content from './components/MainComponents/Content';
+import Menu from './components/MainComponents/Menu';
 
 class App extends Component {
   goToPage = (pageNumber) => {
@@ -8,12 +8,10 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="App">
+      <>
         <Menu />
-        <div className="content-main-own">
-          <Content />
-        </div>
-      </div>
+        <Content />
+      </>
     );
   }
 }

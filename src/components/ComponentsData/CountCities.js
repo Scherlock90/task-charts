@@ -3,8 +3,8 @@ import axios from 'axios';
 import { BarChart, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
 import * as d3 from "d3";
 import { Link } from 'react-router-dom';
-import BackArrow from '../Assets/back_arrow.jpg';
-import ViewData from './ViewComponents/ViewData';
+import BackArrow from '../../assets/back_arrow.jpg';
+import ViewData from '../ViewComponents/ViewData';
 
 Array.prototype.sum = function (prop) {
   var total = 0
