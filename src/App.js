@@ -18,12 +18,4 @@ class App extends Component {
   }
 }
 
-const styleContent = {
-  margin: '1em',
-  padding: '3em',
-  display: 'flex',
-  justifyContent: 'center',
-  height: '100vh'
-}
-
 export default App;

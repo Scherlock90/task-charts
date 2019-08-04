@@ -3,8 +3,8 @@ import axios from 'axios';
 import { BarChart, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
 import * as d3 from "d3";
 import { Link } from 'react-router-dom';
-import BackArrow from '../images/back_arrow.jpg';
-import ViewCountCities from './ViewComponents/ViewCountCities';
+import BackArrow from '../Assets/back_arrow.jpg';
+import ViewData from './ViewComponents/ViewData';
 
 Array.prototype.sum = function (prop) {
   var total = 0
@@ -75,25 +75,20 @@ export default class CountCities extends React.Component {
       .entries(cities);
 
     const loader = <div style={styleLoader}>Data is loading...</div>;
+
     return (
       <>
-        <ViewCountCities 
-          backTohome={backToHome} 
-          title={
-            expenseMetrics2.length > 0
-              ?
-                "Count Cities"
-              :
-                null
-          } 
-          data={
-            expenseMetrics2.length > 0
-              ?
-                <BarCharts3 data={expenseMetrics2} />
-              :
-                loader
-          }
-        />
+        {
+          expenseMetrics2.length > 0 
+            ?
+              <ViewData 
+                backTohome={backToHome} 
+                title={"Count Cities"} 
+                data={<BarCharts3 data={expenseMetrics2} /> }
+              />
+            :
+              loader
+        }
       </>
     )
   }

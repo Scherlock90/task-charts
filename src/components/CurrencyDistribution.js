@@ -1,10 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import { BarChart, LineChart, Line, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
+import { BarChart, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
 import Button from 'react-bootstrap/Button';
 import * as d3 from "d3";
-import {Link} from 'react-router-dom';
-import BackArrow from '../images/back_arrow.jpg';
+import { Link } from 'react-router-dom';
+import BackArrow from '../Assets/back_arrow.jpg';
 
 let currencyName = "ISO4217-currency_name";
 let currencyMinor = "ISO4217-currency_minor_unit";
@@ -18,6 +18,19 @@ Array.prototype.sum = function (prop) {
   }
   return total
 }
+
+const backToHome = (
+  <Link
+    to='/'
+    className="linkTo"
+  >
+    <img
+      src={BackArrow}
+      width={50}
+    />
+    Back
+  </Link>
+)
 
 export default class CurrencyDistribution extends React.Component {
   constructor(props) {
@@ -36,11 +49,13 @@ export default class CurrencyDistribution extends React.Component {
   componentDidMount() {
     axios.get('https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/471a2e653140ecdd7243cdcacfd66608/country-codes_json.json')
       .then(res => {
-        let countryWithEuro = res.data.map(function (country) {
-          return country[currencyName] === "Euro"
-        }).reduce(function (previousValue, currentValue) {
-          return previousValue + currentValue
-        });
+        let countryWithEuro = res.data
+          .map(function (country) {
+            return country[currencyName] === "Euro"
+          })
+          .reduce(function (previousValue, currentValue) {
+            return previousValue + currentValue
+          });
         let countryInTheWorld = res.data;
         this.setState({
           minor: res.data,
@@ -61,7 +76,8 @@ export default class CurrencyDistribution extends React.Component {
 
   sortBy(key) {
     let arrayCopy = [...this.state.minor];
-    arrayCopy.sort(this.compareBy(key));
+    arrayCopy
+      .sort(this.compareBy(key));
     this.setState({ minor: arrayCopy });
   }
   handleClickInfo = (e) => {
@@ -72,8 +88,8 @@ export default class CurrencyDistribution extends React.Component {
   }
 
   render() {
-    const {  minor, countryWithEuro, countryInWorld, cities } = this.state;
-      
+    const { minor, countryWithEuro, countryInWorld } = this.state;
+
     const dataList = minor.length ? (minor
       .filter((album, i) => {
         return (
@@ -90,14 +106,6 @@ export default class CurrencyDistribution extends React.Component {
         <div className="center">No data yet! </div>
       );
 
-    let expenseMetrics2 = d3.nest()
-        .key(function (d) { return d.country; })
-        .rollup(function(v) { return {
-      count_cities: v.length,
-    }; })
-      .entries(cities);
-    console.log((expenseMetrics2));
-
     let expenseMetrics = d3.nest()
       .key(function (d) { return d[currencyName]; })
       .rollup(function (v) {
@@ -107,13 +115,14 @@ export default class CurrencyDistribution extends React.Component {
         };
       })
       .entries(dataList);
-    console.log((expenseMetrics));
+
+    const loader = <div style={styleLoader}>Data is loading...</div>;
 
     return (
       <div className="containerLoader">
         <div className="countryd z-depth-0 project-summary thumb">
           <div className="countryd-content grey-text text-darken-3 containerPost">
-          <div className="title"> Currency distribution</div>
+            <div className="title"> Currency distribution</div>
             <div className="chartsContainer">
               <BarCharts data={expenseMetrics} />
             </div>
@@ -128,9 +137,9 @@ export default class CurrencyDistribution extends React.Component {
                 <div> {this.state.textInfo} </div>
               </div>
             </div>
-            <div className="leftSide"> 
-              <Link to='/' className="linkTo"><img src={BackArrow} width={50} /> Back </Link>             
-            </div>  
+            <div className="leftSide">
+              <Link to='/' className="linkTo"><img src={BackArrow} width={50} /> Back </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -143,13 +152,16 @@ class CustomTooltip extends React.Component {
   render() {
     const { active, payload, label } = this.props;
 
-    if (active) {  
-      if(payload) {   
-      return (
-        <div className="custom-tooltip">
-          <p className="label">{`${label}: ${payload[0].value}`}</p>
-        </div>
-      );}
+    if (active) {
+      if (payload) {
+        return (
+          <div className="custom-tooltip">
+            <p className="label">
+              {`${label}: ${payload[0].value}`}
+            </p>
+          </div>
+        );
+      }
     }
 
     return null;
@@ -158,11 +170,21 @@ class CustomTooltip extends React.Component {
 
 class CustomizedAxisTick extends React.Component {
   render() {
-    const { x, y, stroke, payload } = this.props;
+    const { x, y, payload } = this.props;
 
     return (
       <g transform={`translate(${x},${y})`}>
-        <text x={0} y={0} dy={4} textAnchor="end" fill="#666" fontSize="12px" transform="rotate(-25)">{payload.value}</text>
+        <text 
+          x={0} 
+          y={0} 
+          dy={4} 
+          textAnchor="end" 
+          fill="#666"
+          fontSize="12px" 
+          transform="rotate(-25)"
+        >
+          {payload.value}
+        </text>
       </g>
     );
   }
@@ -171,37 +193,103 @@ class CustomizedAxisTick extends React.Component {
 
 function BarCharts(props) {
   return (
-    <BarChart width={900} height={400} data={props.data}>
+    <BarChart 
+      width={900} 
+      height={400} 
+      data={props.data}
+    >
       <countrytesianGrid strokeDasharray="3 3" />
-      <XAxis tick={<CustomizedAxisTick />} dataKey="key" >
-        <Label value="Minor" offset={-5} position="insideBottomRight" />
+      <XAxis 
+        tick={<CustomizedAxisTick />} 
+        dataKey="key" 
+      >
+        <Label 
+          value="Minor" 
+          offset={-5} 
+          position="insideBottomRight" 
+        />
       </XAxis>
       <YAxis>
-        <Label value="Currency distribution" offset={0} angle={-90} position="insideLeft" />
+        <Label 
+          value="Currency distribution" 
+          offset={0} 
+          angle={-90} 
+          position="insideLeft" 
+        />
       </YAxis>
-      <Tooltip content={<CustomTooltip />} />
-      <Legend verticalAlign="top" payload={[{ value: 'Currency distribution', type: 'square', color: 'rgb(130, 202, 157)' }]} />
-      <Bar dataKey="value.ISO4217-currency_minor_unit" fill="#82ca9d" />
+      <Tooltip 
+        content={<CustomTooltip />} 
+      />
+      <Legend 
+        verticalAlign="top" 
+        payload={
+          [
+            { 
+              value: 'Currency distribution', 
+              type: 'square', 
+              color: 'rgb(130, 202, 157)' 
+              }
+          ]
+        } 
+      />
+      <Bar 
+        dataKey="value.ISO4217-currency_minor_unit" 
+        fill="#82ca9d" 
+      />
     </BarChart>
   )
 }
 
 function BarCharts2(props) {
-  const style={
-    padding: '0.2em'
-  }
   return (
-    <BarChart width={900} height={400} data={props.data}>
+    <BarChart 
+      width={900} 
+      height={400} 
+      data={props.data}
+    >
       <countrytesianGrid strokeDasharray="3 3" />
-      <XAxis tick={<CustomizedAxisTick />} dataKey="key" >
-        <Label value="Minor" offset={-5} position="insideBottomRight" />
+      <XAxis 
+        tick={<CustomizedAxisTick />} 
+        dataKey="key" 
+      >
+        <Label 
+          value="Minor" 
+          offset={-5} 
+          position="insideBottomRight" 
+        />
       </XAxis>
       <YAxis>
-          <Label value="Countries using currency" offset={0} angle={-90} position="insideLeft" />     
+        <Label 
+          value="Countries using currency" 
+          offset={0} 
+          angle={-90} 
+          position="insideLeft" 
+        />
       </YAxis>
-      <Tooltip content={<CustomTooltip />} />
-      <Legend verticalAlign="top" payload={[{ value: 'Number of countries using the currency', type: 'square', color: 'rgb(130, 202, 157)' }]} />
-      <Bar dataKey="value.count" fill="#82ca9d" />
+      <Tooltip 
+        content={<CustomTooltip />} 
+      />
+      <Legend
+        verticalAlign="top"
+        payload={
+          [
+            {
+              value: 'Number of countries using the currency',
+              type: 'square',
+              color: 'rgb(130, 202, 157)'
+            }
+          ]
+        }
+      />
+      <Bar
+        dataKey="value.count"
+        fill="#82ca9d"
+      />
     </BarChart>
   )
+}
+
+const styleLoader = {
+  fontSize: '42px',
+  padding: '3rem'
 }
