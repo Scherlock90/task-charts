@@ -1,10 +1,10 @@
 import React from 'react';
 import { Switch, Route} from 'react-router-dom';
-import PopulationTrend from './PopulationTrend';
-import CurrencyDistribution from './CurrencyDistribution';
-import CountCities from './CountCities';
+import PopulationTrend from '../ComponentsData/PopulationTrend';
+import CurrencyDistribution from '../ComponentsData/CurrencyDistribution';
+import CountCities from '../ComponentsData/CountCities';
 import Home from './Home';
-import '../Styles/main.css';
+import '../../styles/main.css';
 
 const Content = () => {
   return(
