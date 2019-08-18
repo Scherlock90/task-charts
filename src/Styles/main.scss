@@ -164,3 +164,28 @@ body {
         height: 100%;
     }
 }
+
+.container-home{
+    width: 100%;
+}
+
+.col-home{
+    width: 30%;
+    margin: 2em;
+}
+
+.footer-container{
+    text-align: center;
+    padding: 2em 0 2em 0;
+    width: auto;
+}
+
+.loading{
+    display: flex;
+    justify-content: center;
+}
+
+.loader{
+    font-size: 42px;
+    padding: 3rem;
+}

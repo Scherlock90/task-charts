@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { LineChart, Line, Tooltip, Legend, XAxis, YAxis} from 'recharts';
 import { Link } from 'react-router-dom';
-import BackArrow from '../../assets/back_arrow.jpg';
+import BackArrow from '../../Assets/back_arrow.jpg';
 import ViewData from '../ViewComponents/ViewData';
 
 Array.prototype.sum = function (prop) {

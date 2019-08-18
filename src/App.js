@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Content from './components/MainComponents/Content';
 import Menu from './components/MainComponents/Menu';
+import Footer from './components/MainComponents/Footer';
 
 class App extends Component {
   goToPage = (pageNumber) => {
@@ -11,6 +12,7 @@ class App extends Component {
       <>
         <Menu />
         <Content />
+        <Footer />
       </>
     );
   }

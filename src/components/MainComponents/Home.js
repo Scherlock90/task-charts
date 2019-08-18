@@ -1,20 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
-import LineChart from '../../assets/single-line-chart.png';
-import BarChart from '../../assets/barChart.png';
-import CitiesBarChart from '../../assets/citiesBarChart.png';
+import LineChart from '../../Assets/single-line-chart.png';
+import BarChart from '../../Assets/barChart.png';
+import CitiesBarChart from '../../Assets/citiesBarChart.png';
 
 export default function Home() {
     return (
         <div className="container-main-own">
-            <Container style={container}>
+            <Container className="container-home">
                 <Row className="row-main-own">
                     <Col 
                         sm 
-                        style={colMain} 
                         sm={4} 
-                        className="col-main"
+                        className="col-main col-home"
                     > 
                         <Link 
                             to="/population-trend" 
@@ -32,9 +31,8 @@ export default function Home() {
                     </Col>
                     <Col 
                         sm 
-                        style={colMain} 
                         sm={4} 
-                        className="col-main"
+                        className="col-main col-home"
                     > 
                         <Link 
                             to="/currency-distribution" 
@@ -52,9 +50,8 @@ export default function Home() {
                     </Col>
                     <Col 
                         sm 
-                        style={colMain}
                         sm={4} 
-                        className="col-main"
+                        className="col-main col-home"
                     > 
                         <Link 
                             to="/count-cities" 
@@ -74,13 +71,4 @@ export default function Home() {
             </Container>
         </div>
     )
-}
-
-const container = {
-    width: '100%'
-}
-
-const colMain = {
-    width: '30%',
-    margin: '2em'
 }

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { BarChart, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
 import * as d3 from "d3";
 import { Link } from 'react-router-dom';
-import BackArrow from '../../assets/back_arrow.jpg';
+import BackArrow from '../../Assets/back_arrow.jpg';
 import ViewCurrencyDistribution from '../ViewComponents/ViewCurrencyDistribution';
 
 let currencyName = "ISO4217-currency_name";

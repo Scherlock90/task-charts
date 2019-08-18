@@ -1,16 +1,8 @@
 import React from 'react';
 
-const containerLoader = {
-    display: 'flex',
-    justifyContent: 'center',
-}
-
 export default function ViewData({ ...props }) {
     return (
-        <div
-            className="containerLoader"
-            style={containerLoader}
-        >
+        <div className="containerLoader loading">
             <div className="countryd z-depth-0 project-summary thumb">
                 <div className="countryd-content grey-text text-darken-3 containerPost">
                     <div className="containerTitle">
