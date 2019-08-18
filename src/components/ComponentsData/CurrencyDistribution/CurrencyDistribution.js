@@ -2,35 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { BarChart, Tooltip, Legend, XAxis, YAxis, Bar, Label } from 'recharts';
 import * as d3 from "d3";
-import { Link } from 'react-router-dom';
-import BackArrow from '../../Assets/back_arrow.jpg';
-import ViewCurrencyDistribution from '../ViewComponents/ViewCurrencyDistribution';
-
-let currencyName = "ISO4217-currency_name";
-let currencyMinor = "ISO4217-currency_minor_unit";
-let continent = "Continent";
-let textInfo = 'Because it was not entirely clear what data should apply to the "quantitative distribution of currencies in use in the world" or the number of countries using the currency or currency multiplied by its value -> ISO4217-currency_minor_unit, therefore there are two versions of the data.'
-
-Array.prototype.sum = function (prop) {
-  var total = 0
-  for (var i = 0, _len = this.length; i < _len; i++) {
-    total += this[i][prop]
-  }
-  return total
-}
-
-const backToHome = (
-  <Link
-    to='/'
-    className="linkTo"
-  >
-    <img 
-      src={BackArrow}
-      width={50}
-    />
-    Back
-  </Link>
-)
+import ViewCurrencyDistribution from '../../ViewComponents/ViewCurrencyDistribution';
+import { backToHome, loader, currencyMinor, currencyName, continent, textInfo } from '../Elements';
 
 export default class CurrencyDistribution extends React.Component {
   constructor(props) {
@@ -49,22 +22,22 @@ export default class CurrencyDistribution extends React.Component {
   componentDidMount() {
     axios
       .get('https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/471a2e653140ecdd7243cdcacfd66608/country-codes_json.json')
-        .then(res => {
-          let countryWithEuro = res.data
-            .map(function (country) {
-              return country[currencyName] === "Euro"
-            })
-            .reduce(function (previousValue, currentValue) {
-              return previousValue + currentValue
-            });
-          let countryInTheWorld = res.data;
-          this.setState({
-            minor: res.data,
-            countryWithEuro: countryWithEuro,
-            countryInWorld: countryInTheWorld.length,
+      .then(res => {
+        let countryWithEuro = res.data
+          .map(function (country) {
+            return country[currencyName] === "Euro"
+          })
+          .reduce(function (previousValue, currentValue) {
+            return previousValue + currentValue
           });
-          this.sortBy(currencyName);
-        })
+        let countryInTheWorld = res.data;
+        this.setState({
+          minor: res.data,
+          countryWithEuro: countryWithEuro,
+          countryInWorld: countryInTheWorld.length,
+        });
+        this.sortBy(currencyName);
+      })
   }
 
   compareBy(key) {
@@ -112,8 +85,6 @@ export default class CurrencyDistribution extends React.Component {
         };
       })
       .entries(dataList);
-
-    const loader = <div style={styleLoader}>Data is loading...</div>;
 
     return (
       <>

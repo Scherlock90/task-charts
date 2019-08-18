@@ -3,8 +3,8 @@ import {
   Switch,
    Route
 } from 'react-router-dom';
-import PopulationTrend from '../ComponentsData/PopulationTrend';
-import CurrencyDistribution from '../ComponentsData/CurrencyDistribution';
+import PopulationTrend from '../ComponentsData/PopulationTrend/PopulationTrend';
+import CurrencyDistribution from '../ComponentsData//CurrencyDistribution/CurrencyDistribution';
 import CountCities from '../ComponentsData/CountCities/CountCities';
 import Home from './Home';
 import { 

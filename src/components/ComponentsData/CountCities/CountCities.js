@@ -3,7 +3,7 @@ import axios from 'axios';
 import * as d3 from "d3";
 import ViewData from '../../ViewComponents/ViewData';
 import { CustomBarCharts } from './CustomBarCharts';
-import { backToHome, loader } from './ElementsCountCities';
+import { backToHome, loader } from '../Elements';
 
 export default class CountCities extends React.Component {
   constructor(props) {
