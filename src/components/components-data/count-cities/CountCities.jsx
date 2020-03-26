@@ -6,7 +6,7 @@ import { ViewData } from '../../view-components/index';
 import { LinkBackToHome } from '../../common/link-back-to-home/LinkBackToHome'
 import { Loader, CustomBarCharts } from '../../common/index'
 
-export default class CountCities extends React.Component {
+export class CountCities extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

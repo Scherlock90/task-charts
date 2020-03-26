@@ -6,7 +6,7 @@ import { LinkBackToHome } from '../../common/link-back-to-home/LinkBackToHome'
 import { LineCharts } from './custom-bar-charts/CustomBarCharts';
 import { Loader } from '../../common/index'
 
-export default class PopulationTrend extends React.Component {
+export class PopulationTrend extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,12 +1,9 @@
 import React from 'react';
-import {
-  Switch,
-   Route
-} from 'react-router-dom';
-import PopulationTrend from '../../components-data/population-trend/PopulationTrend';
-import CurrencyDistribution from '../../components-data/currency-distribution/CurrencyDistribution';
-import CountCities from '../../components-data/count-cities/CountCities';
+import { Switch, Route } from 'react-router-dom';
+
 import { Home } from '../index';
+import { PopulationTrend, CurrencyDistribution, CountCities } from '../../components-data/index';
+
 import {
   exactRoutes,
   homeRoutes,

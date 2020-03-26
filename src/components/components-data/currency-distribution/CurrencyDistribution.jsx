@@ -7,7 +7,7 @@ import { LinkBackToHome } from '../../common/link-back-to-home/LinkBackToHome'
 import { Loader, CustomBarCharts } from '../../common/index'
 import { currencyMinor, currencyName, continent, textInfo } from '../../../static/Variables';
 
-export default class CurrencyDistribution extends React.Component {
+export class CurrencyDistribution extends React.Component {
   constructor(props) {
     super(props);
 
