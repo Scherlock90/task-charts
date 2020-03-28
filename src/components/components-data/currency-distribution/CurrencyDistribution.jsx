@@ -28,23 +28,16 @@ export class CurrencyDistribution extends React.Component {
   async componentDidMount () {
     const response = await Services.getCurrencyDistribution()
       .catch(error => {
-        if (error) {
-          console.log(error);
-        }
+        if (error) return console.log(error);
       });
 
     if (response) {
       const { data } = response;
 
+      let countryInTheWorld = data
       let countryWithEuro = data
-        .map(country => {
-          return country[currencyName] === "Euro"
-        })
-        .reduce((previousValue, currentValue) => {
-          return previousValue + currentValue
-        });
-
-      let countryInTheWorld = data;
+        .map(country => country[currencyName] === "Euro")
+        .reduce((previousValue, currentValue) => previousValue + currentValue);
 
       this.setState({
         minor: data,
@@ -75,9 +68,7 @@ export class CurrencyDistribution extends React.Component {
   handleClickInfo = (e) => {
     e.preventDefault();
 
-    this.setState({
-      textInfo: textInfo
-    })
+    this.setState({ textInfo: textInfo })
   }
 
   render() {
@@ -96,11 +87,11 @@ export class CurrencyDistribution extends React.Component {
       .map(ee => ee)
 
     let expenseMetrics = d3.nest()
-      .key(function (d) { return d[currencyName]; })
-      .rollup(function (v) {
+      .key(currency =>  currency[currencyName])
+      .rollup(item => {
         return {
-          count: v.length,
-          [currencyMinor]: d3.sum(v, function (d) { return d[currencyMinor]; })
+          count: item.length,
+          [currencyMinor]: d3.sum(item, (currency) => currency[currencyMinor])
         };
       })
       .entries(dataList);

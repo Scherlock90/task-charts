@@ -11,18 +11,17 @@ import {
   currencyDistribution,
   countCities
 } from '../../../static/Routes';
+
 import '../../../assets/styles/main.scss';
 
-export const Content = () => {
-  return(
-      <div>
-        <Switch>
-          <Route exact path={exactRoutes} component={Home} />
-          <Route path={homeRoutes} component={Home} />
-          <Route path={populationTrend} component={PopulationTrend} />
-          <Route path={currencyDistribution} component={CurrencyDistribution} />
-          <Route path={countCities} component={CountCities} />
-        </Switch>
-    </div>
-  )
-}
+export const Content = () => (
+    <div>
+      <Switch>
+        <Route exact path={exactRoutes} component={Home} />
+        <Route path={homeRoutes} component={Home} />
+        <Route path={populationTrend} component={PopulationTrend} />
+        <Route path={currencyDistribution} component={CurrencyDistribution} />
+        <Route path={countCities} component={CountCities} />
+      </Switch>
+  </div>
+)

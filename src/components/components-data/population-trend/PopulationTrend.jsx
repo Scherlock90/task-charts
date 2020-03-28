@@ -18,9 +18,7 @@ export class PopulationTrend extends React.Component {
   async componentDidMount() {
     const response = await Services.getPopulationTrend()
       .catch(error => {
-        if (error) {
-          console.log(error);
-        }
+        if (error) return console.log(error);
       });
 
     if (response) this.setState({ population: response.data });

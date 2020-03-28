@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Col } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 export const ContainerCard = ({ src, chartName, to  }) => (

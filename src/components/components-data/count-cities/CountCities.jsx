@@ -17,9 +17,7 @@ export class CountCities extends React.Component {
   async componentDidMount() {
       const response = await Services.getCountCities()
         .catch(error => {
-          if (error) {
-            console.log(error);
-          }
+          if (error) return console.log(error)
         });
 
       if(response) this.setState({ cities: response.data });
@@ -29,12 +27,8 @@ export class CountCities extends React.Component {
     const { cities } = this.state;
 
     let expenseMetrics = d3.nest()
-      .key(item => { return item.country; })
-      .rollup(country => {
-        return {
-          count_cities: country.length,
-        };
-      })
+      .key(item =>  item.country)
+      .rollup(country => ({count_cities: country.length}))
       .entries(cities);
 
     return (
