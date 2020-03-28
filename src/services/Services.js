@@ -19,7 +19,7 @@ export const Services = {
     getCurrencyDistribution () {
         const options = {
             method: 'GET',
-            url: CURRENCY_DISTRIBUTION,
+            url: CURRENCY_DISTRIBUTION_ENDPOINT,
         }
         return axios(options)
     }
