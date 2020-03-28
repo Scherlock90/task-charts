@@ -1,10 +1,11 @@
 import React from 'react';
-import axios from 'axios';
 
 import { ViewData } from '../../view-components/index';
 import { LinkBackToHome } from '../../common/link-back-to-home/LinkBackToHome'
 import { LineCharts } from './custom-bar-charts/CustomBarCharts';
 import { Loader } from '../../common/index'
+
+import { Services } from '../../../services/Services'
 
 export class PopulationTrend extends React.Component {
   constructor(props) {
@@ -14,14 +15,15 @@ export class PopulationTrend extends React.Component {
     }
   }
 
-  componentDidMount() {
-    axios
-      .get('https://pkgstore.datahub.io/core/population/population_json/data/43d34c2353cbd16a0aa8cadfb193af05/population_json.json')
-      .then(res => {
-        this.setState({
-          population: res.data,
-        })
-      })
+  async componentDidMount() {
+    const response = await Services.getPopulationTrend()
+      .catch(function (error) {
+        if (error) {
+          console.log(error);
+        }
+      });
+
+    if (response) this.setState({ population: response.data });
   }
 
   render() {

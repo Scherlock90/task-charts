@@ -1,6 +1,6 @@
 import React from 'react';
-import axios from 'axios';
 import * as d3 from "d3";
+import { Services } from '../../../services/Services'
 
 import { ViewData } from '../../view-components/index';
 import { LinkBackToHome } from '../../common/link-back-to-home/LinkBackToHome'
@@ -14,14 +14,15 @@ export class CountCities extends React.Component {
     }
   }
 
-  componentDidMount() {
-    axios
-      .get('https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json')
-      .then(res => {
-        this.setState({
-          cities: res.data,
-        })
-      })
+  async componentDidMount() {
+      const response = await Services.getCountCities()
+        .catch(function (error) {
+          if (error) {
+            console.log(error);
+          }
+        });
+
+      if(response) this.setState({ cities: response.data });
   }
 
   render() {

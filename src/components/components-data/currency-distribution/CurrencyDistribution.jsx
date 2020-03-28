@@ -7,6 +7,8 @@ import { LinkBackToHome } from '../../common/link-back-to-home/LinkBackToHome'
 import { Loader, CustomBarCharts } from '../../common/index'
 import { currencyMinor, currencyName, continent, textInfo } from '../../../static/Variables';
 
+import { Services } from '../../../services/Services'
+
 export class CurrencyDistribution extends React.Component {
   constructor(props) {
     super(props);
@@ -23,28 +25,35 @@ export class CurrencyDistribution extends React.Component {
     this.sortBy.bind(this);
   }
 
-  componentDidMount() {
-    axios
-      .get('https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/471a2e653140ecdd7243cdcacfd66608/country-codes_json.json')
-      .then(res => {
-        let countryWithEuro = res.data
-          .map(function (country) {
-            return country[currencyName] === "Euro"
-          })
-          .reduce(function (previousValue, currentValue) {
-            return previousValue + currentValue
-          });
+  async componentDidMount () {
+    const response = await Services.getCurrencyDistribution()
+      .catch(function (error) {
+        if (error) {
+          console.log(error);
+        }
+      });
 
-        let countryInTheWorld = res.data;
+    if (response) {
+      const { data } = response;
 
-        this.setState({
-          minor: res.data,
-          countryWithEuro: countryWithEuro,
-          countryInWorld: countryInTheWorld.length,
+      let countryWithEuro = data
+        .map(function (country) {
+          return country[currencyName] === "Euro"
+        })
+        .reduce(function (previousValue, currentValue) {
+          return previousValue + currentValue
         });
 
-        this.sortBy(currencyName);
-      })
+      let countryInTheWorld = data;
+
+      this.setState({
+        minor: data,
+        countryWithEuro: countryWithEuro,
+        countryInWorld: countryInTheWorld.length,
+      });
+
+      this.sortBy(currencyName);
+    }
   }
 
   compareBy(key) {
