@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { COUNT_CITIES_ENDPOINT, POPULATION_TREND_ENDPOINT, CURRENCY_DISTRIBUTION } from './utils'
+import { COUNT_CITIES_ENDPOINT, POPULATION_TREND_ENDPOINT, CURRENCY_DISTRIBUTION_ENDPOINT } from './utils'
 
 export const Services = {
     getCountCities () {
