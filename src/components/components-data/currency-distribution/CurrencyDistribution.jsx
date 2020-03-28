@@ -27,7 +27,7 @@ export class CurrencyDistribution extends React.Component {
 
   async componentDidMount () {
     const response = await Services.getCurrencyDistribution()
-      .catch(function (error) {
+      .catch(error => {
         if (error) {
           console.log(error);
         }
@@ -37,10 +37,10 @@ export class CurrencyDistribution extends React.Component {
       const { data } = response;
 
       let countryWithEuro = data
-        .map(function (country) {
+        .map(country => {
           return country[currencyName] === "Euro"
         })
-        .reduce(function (previousValue, currentValue) {
+        .reduce((previousValue, currentValue) => {
           return previousValue + currentValue
         });
 
@@ -57,7 +57,7 @@ export class CurrencyDistribution extends React.Component {
   }
 
   compareBy(key) {
-    return function (a, b) {
+    return (a, b) => {
       if (a[key] < b[key]) return -1;
       if (a[key] > b[key]) return 1;
       return 0;

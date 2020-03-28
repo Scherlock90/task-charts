@@ -17,7 +17,7 @@ export class PopulationTrend extends React.Component {
 
   async componentDidMount() {
     const response = await Services.getPopulationTrend()
-      .catch(function (error) {
+      .catch(error => {
         if (error) {
           console.log(error);
         }
@@ -31,9 +31,9 @@ export class PopulationTrend extends React.Component {
 
     const dataList = population
       .slice(11449, 11506)
-      .filter((populationData, i) => {
+      .filter((populationData, idx) => {
         return (
-          <ul key={i}>
+          <ul key={idx}>
             {populationData.Year}
             {populationData.Value}
           </ul>
