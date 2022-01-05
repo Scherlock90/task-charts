@@ -84,7 +84,7 @@ export class CurrencyDistribution extends React.Component {
           </ul>
         );
       })
-      .map(ee => ee)
+      .map(item => item)
 
     let expenseMetrics = d3.nest()
       .key(currency =>  currency[currencyName])
